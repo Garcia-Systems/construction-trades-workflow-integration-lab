@@ -6,6 +6,8 @@ from trades_lab.chapter1.discovery import (
     DiscoveryQuestion, DiscoveryValidationError, NativeIntegrationStatus,
     ProposedTransition, QuestionStatus, Readiness, ReadinessResult,
     SystemDiscovery, TransitionRisk, baseline_readiness, evaluate_readiness,
+    CHAPTER4_MODELED_ASSUMPTIONS, CHAPTER4_RESOLVED_QUESTIONS,
+    chapter4_resolved_readiness,
     validate_authority,
 )
 

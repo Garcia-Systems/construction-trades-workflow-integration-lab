@@ -234,3 +234,29 @@ def evaluate_readiness(transition: ProposedTransition, systems: dict[str, System
 
 def baseline_readiness() -> tuple[ReadinessResult, ...]:
     return tuple(evaluate_readiness(transition) for transition in TRANSITIONS)
+
+
+# Chapter 1 remains immutable baseline evidence.  Chapter 4 explicitly supplies
+# fictional answers needed for its experiment rather than rewriting history.
+CHAPTER4_MODELED_ASSUMPTIONS = (
+    "CrewBoard supports externally created jobs",
+    "CrewBoard accepts a deterministic external reference",
+    "CrewBoard lookup exposes enough job data to detect a compatible existing job",
+    "CrewBoard deduplicates creation by that external reference",
+    "CrewBoard creation acknowledges the authoritative destination job ID",
+    "the consequential-write permission and approval boundary are documented",
+    "EstimateWorks accepted estimate identity and version are readable",
+)
+CHAPTER4_RESOLVED_QUESTIONS = tuple(
+    replace(question, status=QuestionStatus.ANSWERED,
+            automation_impact=f"MODELED ASSUMPTION resolved for Chapter 4: {question.question}")
+    if question.id in {"DISC-001", "DISC-002"} else question
+    for question in QUESTIONS
+)
+
+
+def chapter4_resolved_readiness() -> ReadinessResult:
+    """Evaluate only the handoff using Chapter 4's modeled discovery variant."""
+    transition = next(item for item in TRANSITIONS
+                      if item.key == "accepted_estimate_to_job")
+    return evaluate_readiness(transition, questions=CHAPTER4_RESOLVED_QUESTIONS)
