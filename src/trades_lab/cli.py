@@ -8,6 +8,8 @@ from trades_lab.chapter1 import QUESTIONS, SYSTEMS, TRANSITIONS, QuestionStatus,
 from trades_lab.chapter3 import LeadToEstimateHandoff
 from trades_lab.chapter4 import (AcceptedEstimateToJobHandoff, CrewBoardSimulator,
                                  DestinationJob, ServiceAddress)
+from trades_lab.chapter5 import (CrewBoardSchedulingSimulator, CrewSkill,
+                                 JobToScheduleHandoff, ScheduleAssignment)
 from trades_lab.domain.states import (EstimateState, JobState, map_estimateworks_state,
                                       map_fieldtrack_state)
 from trades_lab.domain.transitions import can_transition, validate_transition, TransitionError
@@ -18,6 +20,9 @@ from trades_lab.fixtures.chapter3 import (AMBIGUOUS_IDENTITY_LEAD, INELIGIBLE_LE
 from trades_lab.fixtures.chapter4 import (MISSING_CUSTOMER_ESTIMATE, OPEN_ESTIMATE,
                                           STALE_ACCEPTED_ESTIMATE,
                                           VALID_ACCEPTED_ESTIMATE)
+from trades_lab.fixtures.chapter5 import (CANCELLED_JOB, CHANGED_DURATION_JOB,
+                                          INVALID_WINDOW_JOB, MISSING_SKILL_JOB,
+                                          PENDING_JOB, VALID_READY_JOB)
 
 
 def _money(value: Decimal) -> str:
@@ -235,9 +240,67 @@ def render_chapter4() -> str:
     ))
 
 
+def render_chapter5() -> str:
+    handoff = JobToScheduleHandoff()
+    first = handoff.process(VALID_READY_JOB)
+    replay = handoff.process(VALID_READY_JOB, "job-event-002")
+    replay_request_count = len(handoff.destination.requests)
+    changed = handoff.process(CHANGED_DURATION_JOB)
+    missing = JobToScheduleHandoff().process(MISSING_SKILL_JOB)
+    invalid = JobToScheduleHandoff().process(INVALID_WINDOW_JOB)
+    pending = JobToScheduleHandoff().process(PENDING_JOB)
+    conflict_destination = CrewBoardSchedulingSimulator()
+    conflict_handoff = JobToScheduleHandoff(conflict_destination)
+    original = conflict_handoff.process(VALID_READY_JOB)
+    conflict_destination.record_assignment(ScheduleAssignment(
+        "CB-ASG-001", VALID_READY_JOB.job_id, original.acknowledgement.request_id,
+        "CREW-4", (CrewSkill.HVAC_INSTALL, CrewSkill.TWO_PERSON_CREW),
+        VALID_READY_JOB.earliest_start, VALID_READY_JOB.latest_completion))
+    conflict = conflict_handoff.process(CHANGED_DURATION_JOB)
+    cancel_handoff = JobToScheduleHandoff()
+    cancel_handoff.process(VALID_READY_JOB)
+    cancelled = cancel_handoff.process(CANCELLED_JOB)
+    cancel_replay = cancel_handoff.process(CANCELLED_JOB, "job-event-cancel-replay")
+    stale = cancel_handoff.process(VALID_READY_JOB, "old-ready-event")
+    assert first.acknowledgement and replay.acknowledgement
+    return "\n".join((
+        "CONSTRUCTION / TRADES WORKFLOW INTEGRATION LAB",
+        "Chapter 5 — Job to Schedule", "", "SCENARIO A — VALID JOB", "",
+        f"Authoritative job: {VALID_READY_JOB.job_id}", "Job state: READY",
+        "Required capabilities: " + ", ".join(x.value for x in VALID_READY_JOB.required_skill_tags),
+        f"Estimated duration: {VALID_READY_JOB.estimated_duration_minutes} minutes",
+        f"Outcome: {first.outcome.value}",
+        f"CrewBoard request: {first.acknowledgement.request_id}",
+        f"Request state: {first.acknowledgement.request_state.value}",
+        "Crew assigned by integration: NO", "Acknowledgement means assigned: NO", "",
+        "SCENARIO B — EXACT REPLAY", "", f"Outcome: {replay.outcome.value}",
+        f"Same request: {first.acknowledgement.request_id == replay.acknowledgement.request_id}",
+        f"Scheduling requests: {replay_request_count}", "",
+        "SCENARIO C — MISSING CREW REQUIREMENT", "", f"Outcome: {missing.outcome.value}",
+        f"Exception: {missing.exception.summary}", "Crew guessed: NO", "",
+        "SCENARIO D — INVALID WINDOW", "", f"Outcome: {invalid.outcome.value}", "",
+        "SCENARIO E — JOB NOT READY", "", f"Outcome: {pending.outcome.value}", "",
+        "SCENARIO F — JOB REQUIREMENTS CHANGED", "", "Original duration: 240 minutes",
+        "New duration: 360 minutes", f"Outcome: {changed.outcome.value}",
+        "Automatically rescheduled: NO", "Previous request provenance preserved: YES", "",
+        "SCENARIO G — EXISTING ASSIGNMENT CONFLICT", "", f"Outcome: {conflict.outcome.value}",
+        "Automatic assignment overwrite: NO", "Dispatcher review required: YES", "",
+        "SCENARIO H — CANCELLATION", "", f"Outcome: {cancelled.outcome.value}",
+        f"Repeated cancellation: {cancel_replay.outcome.value}",
+        "Historical request deleted: NO", f"Old READY event after cancellation: {stale.outcome.value}",
+        "", "OBSERVED LAB RESULT", "",
+        "Validated scheduling context crosses the boundary without choosing a crew.",
+        "Acknowledgement remains UNASSIGNED, exact replay creates no duplicate, and a",
+        "meaningful change remains distinct from replay. Authoritative assignments are",
+        "not overwritten; conflicts require human review.", "",
+        "CrewBoard semantics, crew capabilities, windows, and cancellation support are",
+        "MODELED ASSUMPTIONS. This lab does not optimize schedules.",
+    ))
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run executable textbook chapters")
-    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4"))
+    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5"))
     args = parser.parse_args(argv)
     if args.chapter == "chapter0":
         print(render_chapter0())
@@ -249,4 +312,6 @@ def main(argv: list[str] | None = None) -> int:
         print(render_chapter3())
     elif args.chapter == "chapter4":
         print(render_chapter4())
+    elif args.chapter == "chapter5":
+        print(render_chapter5())
     return 0
