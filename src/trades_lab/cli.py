@@ -12,6 +12,7 @@ from trades_lab.chapter5 import (CrewBoardSchedulingSimulator, CrewSkill,
                                  JobToScheduleHandoff, ScheduleAssignment)
 from trades_lab.chapter6 import MaterialsHandoff
 from trades_lab.chapter7 import FieldStatusHandoff
+from trades_lab.chapter8 import InvoiceReadinessService, ReadinessException, VALUE_MECHANISM
 from trades_lab.domain.states import (EstimateState, JobState, map_estimateworks_state,
                                       map_fieldtrack_state)
 from trades_lab.domain.transitions import can_transition, validate_transition, TransitionError
@@ -30,6 +31,8 @@ from trades_lab.fixtures.chapter6 import (AMBIGUOUS_REQUIREMENT,
     PARTIAL_REQUIREMENTS, REGISTRY, SUBSTITUTE_REQUIREMENT, UNKNOWN_REQUIREMENT,
     UNIT_MISMATCH_REQUIREMENT)
 from trades_lab.fixtures.chapter7 import CREW_MAPPINGS, JOB_MAPPINGS, event as field_event
+from trades_lab.fixtures.chapter8 import (CUSTOMER_MAPPINGS, PARTIAL_FACTS, READY_FACTS)
+from dataclasses import replace
 
 
 def _money(value: Decimal) -> str:
@@ -413,9 +416,51 @@ def render_chapter7() -> str:
     ))
 
 
+def render_chapter8() -> str:
+    service = InvoiceReadinessService(CUSTOMER_MAPPINGS)
+    ready = service.evaluate(READY_FACTS)
+    replay = service.evaluate(READY_FACTS)
+    partial = InvoiceReadinessService(CUSTOMER_MAPPINGS).evaluate(PARTIAL_FACTS)
+    material = InvoiceReadinessService(CUSTOMER_MAPPINGS).evaluate(
+        replace(READY_FACTS, materials_resolved=False))
+    missing_identity = InvoiceReadinessService({}).evaluate(READY_FACTS)
+    approval_facts = replace(READY_FACTS, job_type="COMMERCIAL_CHANGE_ORDER")
+    before = InvoiceReadinessService(CUSTOMER_MAPPINGS).evaluate(approval_facts)
+    after = InvoiceReadinessService(CUSTOMER_MAPPINGS).evaluate(
+        replace(approval_facts, customer_approved=True))
+    nonblocking = InvoiceReadinessService(CUSTOMER_MAPPINGS).evaluate(replace(
+        READY_FACTS, exceptions=(ReadinessException("EX-NOTE", "operational note", True, False),)))
+    checks = "\n".join(f"{c.name:<32} {c.outcome.value} — {c.detail}" for c in ready.readiness.checks)
+    return "\n".join((
+        "CONSTRUCTION / TRADES WORKFLOW INTEGRATION LAB",
+        "Chapter 8 — Completion to Invoice Readiness", "",
+        "SCENARIO A — FULLY READY", "Authoritative job: JOB-9001", "Field status: COMPLETED", "",
+        "READINESS CHECKS", checks, f"Result: {ready.readiness.status.value}",
+        f"LedgerPro billing-ready work item: {ready.acknowledgement.billing_work_item_reference}",
+        "Invoice created: NO", "", "SCENARIO B — EXACT READINESS REPLAY",
+        f"Same fingerprint: {ready.readiness.fingerprint == replay.readiness.fingerprint}",
+        f"Outcome: {replay.acknowledgement.outcome.value}", f"Work items: {len(service.ledgerpro.work_items)}", "",
+        "SCENARIO C — PARTIAL COMPLETION", "Field status: PARTIALLY_COMPLETE",
+        f"Result: {partial.readiness.status.value}", "Invoice-ready command: NO", "",
+        "SCENARIO D — MATERIAL EXCEPTION", f"Result: {material.readiness.status.value}",
+        material.readiness.blocking_checks[0], "", "SCENARIO E — ACCOUNTING IDENTITY MISSING",
+        f"Result: {missing_identity.readiness.status.value}", "Guessed LedgerPro customer: NO", "",
+        "SCENARIO H — APPROVAL RECEIVED", f"Before: {before.readiness.status.value}",
+        f"After: {after.readiness.status.value}",
+        f"Same readiness fingerprint: {before.readiness.fingerprint == after.readiness.fingerprint}", "",
+        "SCENARIO I — NON-BILLING EXCEPTION", f"Result: {nonblocking.readiness.status.value}", "",
+        "VALUE MECHANISM", VALUE_MECHANISM["path"],
+        "Integration may reduce: " + ", ".join(VALUE_MECHANISM["may_reduce"]),
+        "Invoice principal: NOT INCLUDED", "", "OBSERVED LAB RESULT",
+        "Field completion alone is insufficient for invoice readiness.",
+        "Explicit synthetic prerequisites can produce a billing-ready handoff without creating an invoice.",
+        "LedgerPro remains authoritative for invoice identity, state, posting, and payment.",
+    ))
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run executable textbook chapters")
-    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7"))
+    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8"))
     args = parser.parse_args(argv)
     if args.chapter == "chapter0":
         print(render_chapter0())
@@ -433,4 +478,6 @@ def main(argv: list[str] | None = None) -> int:
         print(render_chapter6())
     elif args.chapter == "chapter7":
         print(render_chapter7())
+    elif args.chapter == "chapter8":
+        print(render_chapter8())
     return 0
