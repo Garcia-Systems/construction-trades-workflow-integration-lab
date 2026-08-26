@@ -217,7 +217,7 @@ REPORT = DeliveryEconomicsReport(ORIGINAL_MODEL, EVIDENCE_CATEGORIES, SCENARIOS,
     "Adapters, mappings, workflow semantics, access constraints and production onboarding remain recurring delivery work.",
     "Observed implementation-unit reuse is not a labor reuse percentage.",
     "Shared code does not guarantee customer contribution: discovery, credentials, mappings, testing and setup remain.",
-    "This is a delivery-side sensitivity, not a final commercial verdict; Chapters 18–20 remain open.",
+    "This is a delivery-side sensitivity, not the final commercial verdict synthesized in Chapter 20.",
 ))
 
 

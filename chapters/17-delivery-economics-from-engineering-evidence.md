@@ -90,4 +90,4 @@ A technically successful integration can therefore fail economically when delive
 
 ## Limits and next learning
 
-Actual customer discovery must establish authority, credentials, permissions, sandbox behavior, schemas, identifiers, mapping volume/quality, workflow exceptions, deployment constraints and acceptance criteria. Only delivery records can measure labor. This chapter issues a delivery-side sensitivity verdict only—**not a final commercial verdict**. Chapter 18 support economics, Chapter 19 build-versus-buy, and Chapter 20's final verdict remain unimplemented.
+Actual customer discovery must establish authority, credentials, permissions, sandbox behavior, schemas, identifiers, mapping volume/quality, workflow exceptions, deployment constraints and acceptance criteria. Only delivery records can measure labor. This chapter issues a delivery-side sensitivity verdict only—**not a final commercial verdict**. Chapters 18–20 subsequently address support, alternatives, and the final verdict.

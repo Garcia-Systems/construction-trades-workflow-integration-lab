@@ -89,4 +89,4 @@ read-only/native redesign preserves some value. Support surface grows as modeled
 acknowledgements, lookup, export behavior/timing, schema stability, sandbox availability, and native
 alternatives. The lab does not contact vendors, execute external writes, measure production reliability,
 or calculate hours, delivery price, support cost, payback, contribution, or an economic verdict.
-Chapter 17 remains unimplemented.
+Chapter 17 subsequently tests delivery-economic sensitivities.

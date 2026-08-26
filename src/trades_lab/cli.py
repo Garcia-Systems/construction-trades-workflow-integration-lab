@@ -32,6 +32,7 @@ from trades_lab.chapter16 import (CLEAN, CLOSED, DIFFICULT, RELIABILITY_MATRIX, 
 from trades_lab.chapter17 import build_report as build_delivery_report
 from trades_lab.chapter18 import build_report as build_support_report
 from trades_lab.chapter19 import SCENARIOS as DECISION_SCENARIOS, build_decisions, decision_matrix
+from trades_lab.chapter20 import build_report as build_capstone_report
 from trades_lab.fixtures.chapter15 import (BILLING_PROJECT_JOBS, PAPER_COMPLETION, WEAK_IDENTITY_2025,
                                             WEAK_IDENTITY_2026)
 from trades_lab.fixtures.chapter13 import (CONFIG, CREDENTIALS, HEALTHY_DEPENDENCIES,
@@ -818,7 +819,7 @@ def render_chapter15() -> str:
         "The core survives, but expensive customer edges remain an unresolved economic question; no hours or dollars are inferred.", "",
         "MODELED ASSUMPTION",
         "Tidewater, BidForge, its approvals, kits, paper process, billing projects, identifiers, and crew semantics are synthetic.",
-        "Chapter 16 integration-access profiles are not implemented."
+        "Chapter 16 subsequently tests integration-access profiles."
     ))
 
 
@@ -866,7 +867,7 @@ def render_chapter16() -> str:
                   "Access quality is a core feasibility variable, not an implementation detail.", "",
                   "MODELED ASSUMPTION",
                   "All profile capabilities, vendor behavior, batch timing, permissions, and native alternatives are synthetic.",
-                  "No hours, costs, prices, payback, support cost, or economic verdict are calculated. Chapter 17 is not implemented."))
+                  "No hours, costs, prices, payback, support cost, or economic verdict are calculated here; Chapter 17 supplies explicit delivery sensitivities."))
     return "\n".join(lines)
 
 
@@ -960,7 +961,7 @@ def render_chapter18() -> str:
         "OBSERVED LAB RESULT",
         "The integration creates real ongoing support obligations even when its reusable core works correctly.",
         "Whether a $12,000 annual fee is sustainable depends on interface stability, mapping churn, exception volume, customer-specific rules, and contractual scope.",
-        "Recurring revenue is not pure contribution. No final build-versus-buy verdict is produced; Chapter 19 is not implemented."))
+        "Recurring revenue is not pure contribution. No final build-versus-buy verdict is produced here; Chapter 19 screens alternatives."))
     return "\n".join(lines)
 
 
@@ -993,13 +994,55 @@ def render_chapter19() -> str:
         "MODELED ALTERNATIVE ASSUMPTION",
         "ContractorSuite, FlowBridge, and VendorConnect capabilities and scenario fit are synthetic.",
         "SENSITIVITY ASSUMPTION: none added in Chapter 19.",
-        "No overall opportunity verdict is issued. Chapter 20 remains unimplemented."))
+        "No overall opportunity verdict is issued here; Chapter 20 provides the final synthesis."))
+    return "\n".join(lines)
+
+
+def render_chapter20() -> str:
+    report = build_capstone_report()
+    hypothesis = report.original_hypothesis
+    lines = [
+        "CONSTRUCTION / TRADES WORKFLOW INTEGRATION LAB",
+        "Chapter 20 — Capstone: Project, Product, Configure, or Bad Idea?", "",
+        "ORIGINAL HYPOTHESIS — MODELED ASSUMPTION",
+        f"Customer: {hypothesis.customer.name} ({hypothesis.customer.employees} employees; {hypothesis.customer.field_crews} field crews)",
+        f"Current-state burden: {_money(hypothesis.annual_current_state_burden)}",
+        f"Recoverable value: {_money(hypothesis.annual_recoverable_value)}",
+        f"Implementation price: {_money(hypothesis.implementation_price)}",
+        f"Annual recurring fee: {_money(hypothesis.annual_recurring_fee)}",
+        f"Engineering effort: {hypothesis.modeled_engineering_hours} modeled hours",
+        f"Reusable delivery: {hypothesis.reusable_core_percentage}% modeled assumption",
+        f"Original payback: {hypothesis.implementation_payback_months:.1f} months",
+        f"Original commercial verdict: {hypothesis.original_verdict}", "",
+        "WHAT THE LAB ACTUALLY OBSERVED",
+        "Technical workflow feasibility: STRONG", "Reusable integration mechanisms: STRONG",
+        "Source-specific adapter burden: REAL", "Customer-specific workflow burden: REAL",
+        "Integration-access sensitivity: HIGH", "Ongoing support surface: REAL",
+        "Measured customer economics: NO", "", "HYPOTHESIS SCORECARD",
+    ]
+    lines.extend(f"{item.dimension}: {item.rating.value} — {item.explanation}" for item in report.scorecard)
+    lines.extend(("", "SCENARIO VERDICTS"))
+    lines.extend(f"{item.scenario_id} — {item.name}: {item.verdict.value} — {item.reason}" for item in report.scenario_verdicts)
+    lines.extend(("", "OVERALL OPPORTUNITY VERDICT",
+        f"Structural opportunity class: {report.structural_opportunity_class.value}",
+        f"Current commercial readiness: {report.current_commercial_readiness.value}",
+        *(f"- {reason}" for reason in report.overall_rule_reasons), "",
+        "WHAT THIS IS NOT", "Validated SaaS product: NO", "Validated market: NO",
+        "Measured delivery economics: NO", "Universal contractor solution: NO", "",
+        "IDEAL CUSTOMER", *(f"- {item}" for item in report.ideal_customer), "",
+        "DISQUALIFIERS", *(f"- {item}" for item in report.disqualifiers), "",
+        "NEXT REAL-WORLD GATE", report.next_gate, "Required evidence:",
+        *(f"- {item}" for item in report.critical_unknowns), "", "FINAL OBSERVED LAB RESULT",
+        "The engineering experiment supports reusable mechanisms for cross-system contractor workflow integration.",
+        "It does not establish that every contractor should buy custom software, that the modeled labor/economics are correct, or that the solution is a product.",
+        "REUSABLE SOFTWARE COMPONENTS != PRODUCT. The opportunity depends on customer qualification.",
+    ))
     return "\n".join(lines)
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run executable textbook chapters")
-    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10", "chapter11", "chapter12", "chapter13", "chapter14", "chapter15", "chapter16", "chapter17", "chapter18", "chapter19"))
+    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10", "chapter11", "chapter12", "chapter13", "chapter14", "chapter15", "chapter16", "chapter17", "chapter18", "chapter19", "chapter20"))
     args = parser.parse_args(argv)
     if args.chapter == "chapter0":
         print(render_chapter0())
@@ -1041,4 +1084,6 @@ def main(argv: list[str] | None = None) -> int:
         print(render_chapter18())
     elif args.chapter == "chapter19":
         print(render_chapter19())
+    elif args.chapter == "chapter20":
+        print(render_chapter20())
     return 0
