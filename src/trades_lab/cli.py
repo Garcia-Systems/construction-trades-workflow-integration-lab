@@ -15,6 +15,10 @@ from trades_lab.chapter7 import FieldStatusHandoff
 from trades_lab.chapter8 import InvoiceReadinessService, ReadinessException, VALUE_MECHANISM
 from trades_lab.chapter9 import (Fault, FaultScriptDestination, ReliableHandoff)
 from trades_lab.chapter10 import ReconciliationSeverity, Reconciler
+from trades_lab.chapter11 import (BusinessImpact, ExceptionWorkflow, OwnerRole,
+                                  ResolutionAction, age_bucket)
+from trades_lab.domain import ExceptionCategory, ExceptionRecord, ExceptionStatus
+from datetime import datetime, timezone
 from trades_lab.fixtures.chapter10 import BROKEN_SNAPSHOT, CLEAN_SNAPSHOT
 from trades_lab.domain.states import (EstimateState, JobState, map_estimateworks_state,
                                       map_fieldtrack_state)
@@ -552,9 +556,62 @@ def render_chapter10() -> str:
     return "\n".join(lines)
 
 
+def render_chapter11() -> str:
+    workflow = ExceptionWorkflow()
+    def add(identifier, category, entity, days, impact, source="Integration", accounting=False):
+        record = ExceptionRecord(identifier, category, "condition", entity, source,
+                                 f"{category.value} requires review", ExceptionStatus.OPEN,
+                                 datetime(2026, 1, 11 - days, 12, tzinfo=timezone.utc), f"corr-{entity}")
+        return workflow.create(record, f"{category.value}:{entity}", impact,
+                               accounting_mapping=accounting)
+    identity = add("EXC-001", ExceptionCategory.IDENTITY, "LEAD-1001", 2, BusinessImpact.BLOCKS_HANDOFF)
+    material = add("EXC-002", ExceptionCategory.MAPPING, "MAT-404", 0, BusinessImpact.BLOCKS_HANDOFF)
+    conflict = add("EXC-003", ExceptionCategory.STATE_CONFLICT, "JOB-9102", 4, BusinessImpact.OPERATIONAL_REVIEW)
+    access = add("EXC-004", ExceptionCategory.ACCESS, "DEL-009", 1, BusinessImpact.BLOCKS_HANDOFF, "CrewBoard")
+    add("EXC-005", ExceptionCategory.VALIDATION, "JOB-AGING", 4, BusinessImpact.OPERATIONAL_REVIEW)
+    open_lines = ["OPEN EXCEPTIONS"]
+    for item in workflow.queue(status=ExceptionStatus.OPEN):
+        open_lines.extend(("", item.record.exception_id, f"Category: {item.record.category.value}",
+                           f"Entity: {item.record.entity_id}", f"Owner: {item.owner_role.value}",
+                           f"Impact: {item.impact.value}", f"Age: {age_bucket(item.record.created_at).value}"))
+    identity = workflow.resolve(identity.record.exception_id, ResolutionAction.CONFIRM_IDENTITY,
+                                "confirmed existing customer identity", OwnerRole.OFFICE_MANAGER,
+                                mapping=("RiverLead:X", "EstimateWorks:Y"))
+    material = workflow.resolve(material.record.exception_id, ResolutionAction.CREATE_MAPPING,
+                                "approved exact material mapping", OwnerRole.OPERATIONS_MANAGER,
+                                mapping=("MAT-404", "SUPPLY-44"))
+    material = workflow.approve_replay(material.record.exception_id, OwnerRole.OPERATIONS_MANAGER)
+    unchanged = access
+    try:
+        workflow.resolve(access.record.exception_id, ResolutionAction.CREATE_MAPPING, "invalid",
+                         OwnerRole.INTEGRATION_SUPPORT, mapping=("x", "y"))
+    except ValueError:
+        invalid = "REJECTED"
+    lines = ["CONSTRUCTION / TRADES WORKFLOW INTEGRATION LAB", "Chapter 11 — Exception Workflow", ""] + open_lines
+    lines += ["", "SCENARIO A — IDENTITY RESOLUTION", "Action: CONFIRM_IDENTITY",
+              "Status before: OPEN", f"Status after: {identity.status.value}",
+              f"Automation may resume: {'YES' if identity.resolution.automation_may_resume else 'NO'}",
+              "Source records overwritten: NO", f"Audit events: {len(identity.history)}",
+              "", "SCENARIO B — MATERIAL MAPPING", "Action: CREATE_MAPPING", "Mapping approved: YES",
+              f"Exception: {material.status.value}", f"Replay eligible: {'YES' if material.replay_approved else 'NO'}",
+              "Replay executed automatically: NO", "", "SCENARIO C — STATE CONFLICT",
+              f"Owner: {conflict.owner_role.value}", "Automatic destination overwrite: NO", "Review: REQUIRED",
+              "", "SCENARIO H — INVALID ACTION", "Exception category: ACCESS",
+              "Attempted action: CREATE_MAPPING", f"Result: {invalid}",
+              f"Exception state changed: {'NO' if workflow.exceptions[access.record.exception_id] == unchanged else 'YES'}",
+              "", "QUEUE SUMMARY", f"Open: {len(workflow.queue(status=ExceptionStatus.OPEN))}",
+              f"Resolved: {len(workflow.queue(status=ExceptionStatus.RESOLVED))}",
+              f"Overdue open: {sum(age_bucket(x.record.created_at).value == 'OVERDUE' for x in workflow.queue(status=ExceptionStatus.OPEN))}",
+              "", "OBSERVED LAB RESULT",
+              "Unsafe automation becomes owned, bounded, auditable human work with explicit replay approval.",
+              "Source systems remain authoritative; exception resolution performs no source business-state write.",
+              "", "MODELED ASSUMPTIONS: roles, routing, impacts, allowed actions, replay eligibility, and aging thresholds."]
+    return "\n".join(lines)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run executable textbook chapters")
-    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10"))
+    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10", "chapter11"))
     args = parser.parse_args(argv)
     if args.chapter == "chapter0":
         print(render_chapter0())
@@ -578,4 +635,6 @@ def main(argv: list[str] | None = None) -> int:
         print(render_chapter9())
     elif args.chapter == "chapter10":
         print(render_chapter10())
+    elif args.chapter == "chapter11":
+        print(render_chapter11())
     return 0
