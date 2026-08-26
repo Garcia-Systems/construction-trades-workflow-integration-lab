@@ -67,6 +67,9 @@ history, and unresolved exceptions. It reports inconsistencies and performs no r
 Chapter 11 adds deterministic ownership, a bounded review lifecycle and actions, immutable audit
 history, active-condition deduplication, aging, and explicit replay approval. Resolution never
 makes the integration authoritative for source business state.
+Chapter 12 adds a read-only operational-briefing layer over handoff, delivery, reconciliation,
+and exception evidence. It highlights current bottlenecks and ownership without a dashboard or
+new system of record.
 
 ## Evidence vocabulary
 
@@ -100,6 +103,7 @@ python -m trades_lab chapter8
 python -m trades_lab chapter9
 python -m trades_lab chapter10
 python -m trades_lab chapter11
+python -m trades_lab chapter12
 ```
 
 The Chapter 0 CLI proves that its baseline is represented consistently and derives
@@ -125,6 +129,8 @@ Chapter 10 contrasts a clean workflow with missing, conflicting, exhausted, unre
 and orphaned state; successful execution history is distinct from current consistency.
 Chapter 11 contrasts identity, material/accounting mapping, state conflict, access repair,
 exhausted delivery, finding dismissal, invalid action, deduplication, and aging scenarios.
+Chapter 12 contrasts healthy and degraded current snapshots, traceable attention items, and
+deterministic completion-to-readiness timing.
 
 ## Chapter index and study path
 
@@ -140,7 +146,8 @@ exhausted delivery, finding dismissal, invalid action, deduplication, and aging 
 - **Chapter 9 — Failure, Retry, and Replay:** implemented ([read it](chapters/09-failure-retry-and-replay.md)). Run `python -m trades_lab chapter9` to compare bounded recovery, targeted lookup, blocked uncertainty, and exhaustion.
 - **Chapter 10 — Reconciliation:** implemented ([read it](chapters/10-reconciliation.md)). Run `python -m trades_lab chapter10` to compare clean and broken authoritative snapshots.
 - **Chapter 11 — Exception Workflow:** implemented ([read it](chapters/11-exception-workflow.md)). Run `python -m trades_lab chapter11` to inspect routing, resolution, audit, aging, replay eligibility, and rejected actions.
-- **Chapters 12–20:** planned; Chapter 12's management briefing remains unimplemented. Later work will introduce behavior progressively without assuming a favorable outcome.
+- **Chapter 12 — Operational Briefing:** implemented ([read it](chapters/12-operational-briefing.md)). Run `python -m trades_lab chapter12` to compare healthy and degraded management snapshots.
+- **Chapter 13:** planned; production integration engineering has not been implemented. Later chapters remain planned and will not assume a favorable outcome.
 
 Suggested study path: read Chapter 0 and run its CLI, then read Chapter 1 and
 run the discovery briefing. Inspect why readiness changes before drawing a
@@ -193,7 +200,8 @@ reliability or evidence for support economics.
 Invoice principal is **not software-created value and is not included**. Chapter 8
 models only a possible reduction in administrative touches, prerequisite chasing,
 reconciliation, avoidable readiness delay, and associated cash-conversion burden.
-It adds no measured savings and does not recalculate later-chapter economics.
+Chapter 12 reports delay and prerequisites only. It adds no measured savings and does not
+recalculate later-chapter economics.
 
 The original verdict, **PROMISING — VALIDATE IN DISCOVERY**, is a modeled starting
 hypothesis—not a conclusion. Even a technically successful implementation does
@@ -211,3 +219,6 @@ repairing access or mappings, deciding safe replay, and coordinating review are 
 or automatic repair is present. Chapter 11 makes exception review and accountable ownership an
 explicit support surface. Automation intentionally stops at ambiguity; only a bounded human action
 may permit resumption, and replay approval remains distinct from replay execution.
+Chapter 12 derives its briefing from those existing records rather than creating separate truth.
+Briefing rules, changed workflow states, categories, owners, priorities, and thresholds add
+reporting-maintenance **SUPPORT SURFACE**; stale aggregation can reduce management trust.

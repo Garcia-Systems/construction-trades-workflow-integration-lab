@@ -17,6 +17,8 @@ from trades_lab.chapter9 import (Fault, FaultScriptDestination, ReliableHandoff)
 from trades_lab.chapter10 import ReconciliationSeverity, Reconciler
 from trades_lab.chapter11 import (BusinessImpact, ExceptionWorkflow, OwnerRole,
                                   ResolutionAction, age_bucket)
+from trades_lab.chapter12 import build_briefing
+from trades_lab.fixtures.chapter12 import DEGRADED_EVIDENCE, GENERATED_AT, HEALTHY_EVIDENCE
 from trades_lab.domain import ExceptionCategory, ExceptionRecord, ExceptionStatus
 from datetime import datetime, timezone
 from trades_lab.fixtures.chapter10 import BROKEN_SNAPSHOT, CLEAN_SNAPSHOT
@@ -609,9 +611,49 @@ def render_chapter11() -> str:
     return "\n".join(lines)
 
 
+def render_chapter12() -> str:
+    healthy = build_briefing(HEALTHY_EVIDENCE, GENERATED_AT)
+    degraded = build_briefing(DEGRADED_EVIDENCE, GENERATED_AT)
+    c = degraded.workflow_counts
+    lines = [
+        "CONSTRUCTION / TRADES WORKFLOW INTEGRATION LAB", "Chapter 12 — Operational Briefing", "",
+        "SCENARIO A — HEALTHY OPERATIONS", "", f"Overall health: {healthy.health_summary.state.value}",
+        f"Critical reconciliation findings: {healthy.reconciliation_summary.critical_count}",
+        f"Uncertain deliveries: {healthy.workflow_counts.uncertain_deliveries}",
+        f"Overdue exceptions: {healthy.exception_summary.overdue_count}",
+        f"Completed jobs blocked from invoice readiness: {healthy.workflow_counts.completed_not_invoice_ready}", "",
+        "SCENARIO B — DEGRADED OPERATIONS", "", f"Overall health: {degraded.health_summary.state.value}", "",
+        "WORKFLOW BOTTLENECKS",
+        f"Estimate → Job: {c.accepted_estimates_awaiting_job} missing handoff",
+        f"Job → Schedule: {c.scheduling_review_required} review required",
+        f"Materials: {c.unresolved_material_mappings} unresolved mappings",
+        f"Field: {c.field_blocked_jobs} blocked job",
+        f"Completion → Invoice Readiness: {c.completed_not_invoice_ready} blocked", "",
+        "DELIVERY HEALTH", f"Exhausted: {c.exhausted_deliveries}", f"Uncertain: {c.uncertain_deliveries}", "",
+        "EXCEPTIONS", f"Open: {degraded.exception_summary.open_count}",
+        f"Overdue: {degraded.exception_summary.overdue_count}", "", "TOP ATTENTION ITEMS",
+    ]
+    for item in degraded.attention_items[:5]:
+        lines.extend(("", item.severity.value, item.entity_id, item.summary,
+                      *( (f"Owner: {item.owner_role.value}",) if item.owner_role else ()),
+                      f"Evidence: {item.evidence_reference}"))
+    lines.extend(("", "COMPLETION → READINESS"))
+    for delay in healthy.completion_delays + degraded.completion_delays:
+        lines.extend(("", delay.job_id, f"Elapsed: {delay.elapsed.total_seconds() / 3600:g} hours",
+                      f"Status: {delay.status}", *((f"Blocker: {delay.blocker}",) if delay.blocker else ())))
+    lines.extend(("", "MODELED ASSUMPTION",
+        "Health thresholds, severity, priority, synthetic times, selected measures, and delay interpretation.",
+        "No numeric pseudo-score is used.", "", "OBSERVED LAB RESULT",
+        "Existing handoff, delivery, reconciliation, and exception evidence can be condensed",
+        "without creating a second source of truth; bottlenecks retain evidence IDs and ownership.",
+        "Invoice principal is not software-created value.",
+        "This is a current fixture snapshot, not production observability or a system of record."))
+    return "\n".join(lines)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run executable textbook chapters")
-    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10", "chapter11"))
+    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10", "chapter11", "chapter12"))
     args = parser.parse_args(argv)
     if args.chapter == "chapter0":
         print(render_chapter0())
@@ -637,4 +679,6 @@ def main(argv: list[str] | None = None) -> int:
         print(render_chapter10())
     elif args.chapter == "chapter11":
         print(render_chapter11())
+    elif args.chapter == "chapter12":
+        print(render_chapter12())
     return 0
