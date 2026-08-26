@@ -84,6 +84,9 @@ exceptions, and support obligations complicate the repeatability hypothesis.
 Chapter 16 holds the business handoffs constant while varying synthetic interface access. Clean,
 difficult, and closed profiles drive API-write, export-assisted, human-assisted, read-only, or native
 scope redesign; unsupported consequential writes are never simulated.
+Chapter 17 maps that accumulated implementation structure back to the original delivery categories,
+then uses explicit standardized, mixed, bespoke, difficult-access, and closed-redesign sensitivities.
+Repository metrics remain structural evidence, never measured labor.
 
 ## Evidence vocabulary
 
@@ -122,6 +125,7 @@ python -m trades_lab chapter13
 python -m trades_lab chapter14
 python -m trades_lab chapter15
 python -m trades_lab chapter16
+python -m trades_lab chapter17
 ```
 
 The Chapter 0 CLI proves that its baseline is represented consistently and derives
@@ -161,6 +165,10 @@ billing-project readiness, and context-sensitive `DONE` semantics.
 Chapter 16 compares the same six handoffs under clean, difficult, and closed access, including safe-write
 recovery, nightly CSV ingestion, strict schema-drift failure, no-sandbox constraints, and a validated
 human packet that performs no destination write.
+Chapter 17 preserves the original 466 hours, 52.8% reusable effort, and commercial assumptions as
+**MODELED ASSUMPTION**; interprets repository components as **OBSERVED IMPLEMENTATION STRUCTURE**;
+and labels every revised hour, labor-reuse percentage, cost, and contribution as a **SENSITIVITY
+ASSUMPTION**. It revisits delivery economics only, not recurring support economics or a final verdict.
 
 ## Chapter index and study path
 
@@ -181,7 +189,8 @@ human packet that performs no destination write.
 - **Chapter 14 — Measure What Was Actually Built:** implemented ([read it](chapters/14-measure-what-was-actually-built.md)). Run `python -m trades_lab chapter14` to compare Chapter 0 assumptions with observed repository structure.
 - **Chapter 15 — Customer-Specific Rules Stress Test:** implemented ([read it](chapters/15-customer-specific-rules-stress-test.md)). Run `python -m trades_lab chapter15` to inspect the bespoke-customer scenarios and structural change inventory.
 - **Chapter 16 — Integration Access Stress Test:** implemented ([read it](chapters/16-integration-access-stress-test.md)). Run `python -m trades_lab chapter16` to compare clean, difficult, closed, CSV-drift, and human-assisted scenarios.
-- **Chapter 17 — Delivery Economics from Engineering Evidence:** planned and not implemented.
+- **Chapter 17 — Delivery Economics From Engineering Evidence:** implemented ([read it](chapters/17-delivery-economics-from-engineering-evidence.md)). Run `python -m trades_lab chapter17` to inspect category evidence and explicit delivery sensitivities.
+- **Chapter 18 — Support Economics:** planned and not implemented.
 
 Suggested study path: read Chapter 0 and run its CLI, then read Chapter 1 and
 run the discovery briefing. Inspect why readiness changes before drawing a
@@ -207,6 +216,10 @@ Then run Chapter 16. The capability matrix demonstrates that interface quality c
 feasibility even when business need is unchanged. Strict export parsing and packet/provenance mechanisms
 remain reusable; access-specific adapters and configuration grow, while a closed write changes the
 architecture to human action plus reconciliation. These results are structural evidence, not economics.
+Then run Chapter 17. Compare qualitative category evidence with transparent sensitivity inputs; do not
+convert Chapter 14's unit ratio into labor reuse. Delivery economics have now been revisited, while
+annual support effort, recurring contribution, build-versus-buy, and the final opportunity verdict remain
+separate future questions.
 Then read Chapter 3 and run its successful and failed lead scenarios. The bounded
 command, exceptions, provenance, correlation, and process-local replay behavior
 are the lab's first executable handoff evidence—not proof of real vendor
