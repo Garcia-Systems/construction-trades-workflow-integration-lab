@@ -13,6 +13,7 @@ from trades_lab.chapter5 import (CrewBoardSchedulingSimulator, CrewSkill,
 from trades_lab.chapter6 import MaterialsHandoff
 from trades_lab.chapter7 import FieldStatusHandoff
 from trades_lab.chapter8 import InvoiceReadinessService, ReadinessException, VALUE_MECHANISM
+from trades_lab.chapter9 import (Fault, FaultScriptDestination, ReliableHandoff)
 from trades_lab.domain.states import (EstimateState, JobState, map_estimateworks_state,
                                       map_fieldtrack_state)
 from trades_lab.domain.transitions import can_transition, validate_transition, TransitionError
@@ -458,9 +459,66 @@ def render_chapter8() -> str:
     ))
 
 
+def render_chapter9() -> str:
+    def run(name: str, faults: list[Fault], *, lookup: bool = True, reconcile: bool = True):
+        destination = FaultScriptDestination(faults, supports_lookup=lookup)
+        handoff = ReliableHandoff(destination)
+        delivery = handoff.new_delivery(f"event-{name}", f"accepted-estimate:{name}:v1",
+                                        f"correlation-{name}", delivery_id=f"delivery-{name}")
+        return handoff, destination, handoff.execute(delivery, reconcile_uncertain=reconcile)
+
+    _, outage_destination, outage = run("outage", [Fault.UNAVAILABLE, Fault.UNAVAILABLE, Fault.SUCCESS])
+    _, timeout_destination, timeout = run("timeout", [Fault.TIMEOUT_BEFORE_WRITE, Fault.SUCCESS])
+    _, lost_destination, lost = run("lost", [Fault.ACKNOWLEDGEMENT_LOST])
+    _, no_lookup_destination, no_lookup = run("no-lookup", [Fault.ACKNOWLEDGEMENT_LOST], lookup=False)
+    _, _, malformed = run("malformed", [Fault.MALFORMED])
+    _, _, conflict = run("conflict", [Fault.CONFLICT])
+    auth_handoff, _, authentication = run("auth", [Fault.EXPIRED_CREDENTIALS, Fault.SUCCESS])
+    auth_handoff.destination.repair_credentials()
+    repaired = auth_handoff.replay(authentication.delivery_id)
+    _, _, exhausted = run("exhausted", [Fault.UNAVAILABLE] * 3)
+    _, busy_destination, busy = run("busy", [Fault.SERVICE_BUSY, Fault.SUCCESS])
+    attempts = lambda d: ", ".join(
+        f"{a.attempt_number}:{a.outcome.value}/{a.failure_category.value if a.failure_category else 'NONE'}"
+        for a in d.attempts)
+    return "\n".join((
+        "CONSTRUCTION / TRADES WORKFLOW INTEGRATION LAB",
+        "Chapter 9 — Failure, Retry, and Replay", "",
+        "SCENARIO A — TEMPORARY OUTAGE", f"Attempts: {attempts(outage)}",
+        f"Final state: {outage.state.value}", f"Business effects: {len(outage_destination.effects)}", "",
+        "SCENARIO B — TIMEOUT BEFORE WRITE", f"Attempts: {attempts(timeout)}",
+        f"Final state: {timeout.state.value}", f"Business effects: {len(timeout_destination.effects)}", "",
+        "SCENARIO C — ACKNOWLEDGEMENT LOST", "Destination write: SUCCEEDED",
+        "Integration acknowledgement: LOST", "Recorded intermediate state: UNCERTAIN",
+        "Blind retry: NO", f"Destination lookup: FOUND {lost.acknowledgement}",
+        f"Final state: {lost.state.value}", f"Business effects: {len(lost_destination.effects)}", "",
+        "SCENARIO D — UNCERTAIN + NO LOOKUP", "Blind retry: NO",
+        f"Final state: {no_lookup.state.value}", "Automatic recovery: NOT SAFE",
+        f"Human review: {'REQUIRED' if no_lookup.human_review_required else 'NOT REQUIRED'}",
+        f"Business effects (unconfirmed): {len(no_lookup_destination.effects)}", "",
+        "SCENARIO E — MALFORMED INPUT", "Failure category: PERMANENT_VALIDATION",
+        f"Automatic retries: {max(0, len(malformed.attempts) - 1)}", "",
+        "SCENARIO F — CONFLICT", f"Failure category: {conflict.exception.category.value}",
+        "Automatic retry: NO", "Exception: CREATED", "",
+        "SCENARIO G — EXPIRED CREDENTIALS", "Failure category: AUTHENTICATION",
+        "Automatic attempts stopped: YES", "Credential repair: MODELED",
+        f"Explicit replay final state: {repaired.state.value}", "",
+        "SCENARIO H — RETRY EXHAUSTION", f"Attempts: {len(exhausted.attempts)}",
+        f"Final state: {exhausted.state.value}", "Unresolved work visible: YES", "",
+        "SCENARIO I — TEMPORARY SERVICE_BUSY", f"Attempts: {attempts(busy)}",
+        f"Final state: {busy.state.value}", f"Business effects: {len(busy_destination.effects)}", "",
+        "OBSERVED LAB RESULT",
+        "Retries are safe only when failure category and business-effect uncertainty are explicit.",
+        "A targeted stable-identity lookup resolves a modeled lost acknowledgement without duplication;",
+        "without lookup, the consequential delivery remains blocked for human review.", "",
+        "MODELED ASSUMPTIONS: fault behavior, retry limit, credentials, lookup, and outage sequence.",
+        "This bounded synchronous experiment is not production-grade reliability or Chapter 10 reconciliation.",
+    ))
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run executable textbook chapters")
-    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8"))
+    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9"))
     args = parser.parse_args(argv)
     if args.chapter == "chapter0":
         print(render_chapter0())
@@ -480,4 +538,6 @@ def main(argv: list[str] | None = None) -> int:
         print(render_chapter7())
     elif args.chapter == "chapter8":
         print(render_chapter8())
+    elif args.chapter == "chapter9":
+        print(render_chapter9())
     return 0
