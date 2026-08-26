@@ -102,7 +102,7 @@ show both where custom loses and where a full integration layer is defensible. C
 - **OBSERVED LAB RESULT** — Behavior actually demonstrated by the executable synthetic system.
 - **OBSERVED IMPLEMENTATION STRUCTURE** — Repository evidence such as adapters, mappings, transitions, tests, exceptions, jobs, and reliability mechanisms. It is not automatically human-hours evidence.
 - **SENSITIVITY ASSUMPTION** — A hypothetical changed value used to test economics.
-- **FICTIONAL ALTERNATIVE ASSUMPTION** — An unverified capability or price attributed to a hypothetical SaaS alternative.
+- **MODELED ALTERNATIVE ASSUMPTION** — A synthetic capability, characteristic, or price attributed to a fictional alternative product or strategy.
 
 The enum and definitions in `trades_lab.evidence` make these labels reusable.
 
@@ -328,3 +328,26 @@ The pattern appears appropriate when several operational systems must remain, re
 ## What this lab proved — and what it did not prove
 
 The synthetic implementation proved that substantial reusable workflow-integration mechanisms can execute and that customer variation, access, delivery, support, and alternatives materially change the answer. It did **not** prove a product, a market, real vendor capability, measured labor reuse, measured customer value, repeatable sales, or that every contractor should buy custom software. The five evidence labels above remain distinct. Chapters 0–20 are complete; there is no Chapter 21.
+
+## Recommended real-world next step
+
+The technical laboratory is finished. Do **not** build more software merely to extend
+the synthetic evidence. The next gate is real customer discovery:
+
+```text
+CUSTOMER DISCOVERY
+    ↓
+MEASURE CURRENT BURDEN
+    ↓
+MAP SYSTEM AUTHORITY
+    ↓
+VALIDATE ACCESS
+    ↓
+CHECK NATIVE / CONFIGURATION ALTERNATIVES
+    ↓
+BOUND WORKFLOW VARIATION
+    ↓
+TEST WILLINGNESS TO PAY
+    ↓
+ONLY THEN: PROPOSAL / IMPLEMENTATION
+```

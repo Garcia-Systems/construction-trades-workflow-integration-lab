@@ -33,7 +33,7 @@ before fit, and credible options can be considered together.
 All named products here are fictional. **ContractorSuite** is modeled as a broad operations suite;
 **VendorConnect** as a vendor-supported but bounded native handoff; and **FlowBridge** as a low-code
 trigger/action platform with modest transformations. Every capability is a
-`MODELED_ALTERNATIVE_ASSUMPTION`, not a product fact. No real vendor was researched or evaluated.
+`MODELED ALTERNATIVE ASSUMPTION`, not a product fact. No real vendor was researched or evaluated.
 
 The custom layer differs: its identity, idempotency, recovery, reconciliation, exception, variation,
 access, delivery, and support surfaces are `OBSERVED_LAB_EVIDENCE` from Chapters 2–18. That evidence

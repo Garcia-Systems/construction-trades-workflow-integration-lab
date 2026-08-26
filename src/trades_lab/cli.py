@@ -970,7 +970,7 @@ def render_chapter19() -> str:
     scenarios = {scenario.scenario_id: scenario for scenario in DECISION_SCENARIOS}
     lines = ["CONSTRUCTION / TRADES WORKFLOW INTEGRATION LAB",
         "Chapter 19 — Build, Buy, Configure, or Integrate?", "",
-        "All commercial alternatives are fictional: MODELED_ALTERNATIVE_ASSUMPTION.",
+        "All commercial alternatives are fictional: MODELED ALTERNATIVE ASSUMPTION.",
         "No opaque numeric score is used; disqualifiers apply before transparent rules."]
     for decision in decisions:
         scenario = scenarios[decision.scenario_id]

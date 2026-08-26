@@ -10,7 +10,7 @@ class EvidenceCategory(StrEnum):
     OBSERVED_LAB_RESULT = "OBSERVED LAB RESULT"
     OBSERVED_IMPLEMENTATION_STRUCTURE = "OBSERVED IMPLEMENTATION STRUCTURE"
     SENSITIVITY_ASSUMPTION = "SENSITIVITY ASSUMPTION"
-    FICTIONAL_ALTERNATIVE_ASSUMPTION = "FICTIONAL ALTERNATIVE ASSUMPTION"
+    MODELED_ALTERNATIVE_ASSUMPTION = "MODELED ALTERNATIVE ASSUMPTION"
 
 
 EVIDENCE_DEFINITIONS: dict[EvidenceCategory, str] = {
@@ -25,8 +25,7 @@ EVIDENCE_DEFINITIONS: dict[EvidenceCategory, str] = {
     ),
     EvidenceCategory.SENSITIVITY_ASSUMPTION:
         "A hypothetical changed value used to test economics.",
-    EvidenceCategory.FICTIONAL_ALTERNATIVE_ASSUMPTION: (
+    EvidenceCategory.MODELED_ALTERNATIVE_ASSUMPTION: (
         "An unverified capability or price attributed to a hypothetical SaaS alternative."
     ),
 }
-
