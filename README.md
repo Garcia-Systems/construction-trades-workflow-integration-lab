@@ -60,6 +60,8 @@ normalization, with workflow-specific progression, replay, stale-sequence, block
 and completion handling. Completion is not converted into invoice readiness.
 Chapter 8 adds explainable invoice-readiness validation and an idempotent LedgerPro
 billing-work-item handoff. LedgerPro remains authoritative; no invoice creation exists.
+Chapter 9 adds deterministic fault scripts, explicit failure categories, bounded retry, replay,
+and targeted uncertain-outcome lookup. It is not a production messaging platform.
 
 ## Evidence vocabulary
 
@@ -90,6 +92,7 @@ python -m trades_lab chapter5
 python -m trades_lab chapter6
 python -m trades_lab chapter7
 python -m trades_lab chapter8
+python -m trades_lab chapter9
 ```
 
 The Chapter 0 CLI proves that its baseline is represented consistently and derives
@@ -109,6 +112,8 @@ Chapter 7 contrasts blocked, partial-completion, and completion observations, ex
 versus repeated business state, stale sequences, and mapping/identity exceptions.
 Chapter 8 contrasts fully ready, partial completion, missing accounting identity,
 material/metadata blockers, exact replay, and a customer-approval change.
+Chapter 9 contrasts temporary outage, timeout-before-write, acknowledgement loss,
+no-lookup uncertainty, permanent/conflict/authentication stops, and retry exhaustion.
 
 ## Chapter index and study path
 
@@ -121,8 +126,9 @@ material/metadata blockers, exact replay, and a customer-approval change.
 - **Chapter 6 — Materials and Purchasing Handoff:** implemented ([read it](chapters/06-materials-and-purchasing-handoff.md)). Run `python -m trades_lab chapter6` to compare direct mapping, unknown identity, conversion, and partial readiness.
 - **Chapter 7 — Field Status to Office:** implemented ([read it](chapters/07-field-status-to-office.md)). Run `python -m trades_lab chapter7` to study blocked, partial, complete, replay, repeated-state, and stale-event scenarios.
 - **Chapter 8 — Completion to Invoice Readiness:** implemented ([read it](chapters/08-completion-to-invoice-readiness.md)). Run `python -m trades_lab chapter8` to compare fully ready, partial-completion, missing-accounting-identity, replay, and approval-change scenarios.
-- **Chapter 9:** planned; failure/retry behavior is not implemented.
-- **Chapters 10–20:** planned; not implemented. Later work will introduce behavior progressively without assuming a favorable outcome.
+- **Chapter 9 — Failure, Retry, and Replay:** implemented ([read it](chapters/09-failure-retry-and-replay.md)). Run `python -m trades_lab chapter9` to compare bounded recovery, targeted lookup, blocked uncertainty, and exhaustion.
+- **Chapter 10:** planned; general reconciliation is not implemented.
+- **Chapters 11–20:** planned; not implemented. Later work will introduce behavior progressively without assuming a favorable outcome.
 
 Suggested study path: read Chapter 0 and run its CLI, then read Chapter 1 and
 run the discovery briefing. Inspect why readiness changes before drawing a
@@ -162,6 +168,13 @@ and deterministic fingerprints recur; billing gates and evidence are workflow-sp
 the LedgerPro boundary is source-specific, and approval policy is customer-specific.
 The synthetic result can mark prerequisites ready and create one billing work item,
 but LedgerPro remains authoritative for invoice state and the lab creates no invoice.
+Then run Chapter 9. Shared idempotency identity, correlation, acknowledgements, and
+exceptions support bounded attempts and replay. Response classification, conflict and
+authentication semantics, and lookup capability remain destination-specific. The
+executable fault scenarios expand both RELIABILITY and SUPPORT SURFACE: exhausted
+deliveries, uncertainty, credential repair, replay audit, and accumulated conflicts
+require attention. These are implementation-structure observations, not production-grade
+reliability or evidence for support economics.
 
 ## Economic discipline
 
