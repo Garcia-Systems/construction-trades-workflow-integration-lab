@@ -9,8 +9,9 @@ Evidence may strengthen, weaken, or reject the hypothesis.
 
 > **Fictional-customer notice:** James River Mechanical, its approximately 44
 > employees, seven field crews, people, systems, workflows, figures, vendors,
-> datasets, and scenarios are entirely fictional or synthetic. No value is a
-> real-world benchmark.
+> datasets, and scenarios are entirely fictional or synthetic. Tidewater Specialty
+> Services and its deliberately awkward Chapter 15 systems and rules are likewise
+> fictional and synthetic. No value is a real-world benchmark.
 
 ## Architectural boundary
 
@@ -76,7 +77,10 @@ redacted logs, bounded metrics and alerts, scheduled run records, and recovery r
 a real deployment and does not rewrite the earlier workflows.
 Chapter 14 inventories the implementation that actually emerged. Its curated units, chapter-use
 matrix, classifications, evidence levels, reuse scopes, change simulations, and support tags test
-structural reuse without treating repository counts as labor or implementing Chapter 15 economics.
+structural reuse without treating repository counts as labor. It is preserved as additional implementation evidence.
+Chapter 15 returns to the original roadmap with a bespoke-customer stress test. Tidewater rules remain
+at the edge with no shared-core modification, but new adapters, mappings, workflow layers, validation,
+exceptions, and support obligations complicate the repeatability hypothesis.
 
 ## Evidence vocabulary
 
@@ -113,6 +117,7 @@ python -m trades_lab chapter11
 python -m trades_lab chapter12
 python -m trades_lab chapter13
 python -m trades_lab chapter14
+python -m trades_lab chapter15
 ```
 
 The Chapter 0 CLI proves that its baseline is represented consistently and derives
@@ -146,6 +151,9 @@ secret redaction, and runbook lookup.
 Chapter 14 prints the machine-readable inventory summaries, reuse matrix, negative evidence,
 support surface, and bounded `MIXED` structural-confidence verdict. Its implementation-unit ratio
 has a different denominator from Chapter 0's modeled reusable-effort percentage.
+Chapter 15 runs the deliberately unusual Tidewater scenarios: signed versus verbal acceptance,
+early jobs, approval-gated scheduling, partial kit expansion, paper provenance, qualified identity,
+billing-project readiness, and context-sensitive `DONE` semantics.
 
 ## Chapter index and study path
 
@@ -164,7 +172,8 @@ has a different denominator from Chapter 0's modeled reusable-effort percentage.
 - **Chapter 12 — Operational Briefing:** implemented ([read it](chapters/12-operational-briefing.md)). Run `python -m trades_lab chapter12` to compare healthy and degraded management snapshots.
 - **Chapter 13 — Production Integration Engineering:** implemented ([read it](chapters/13-production-integration-engineering.md)). Run `python -m trades_lab chapter13` to inspect healthy startup, partial outages, uncertain-write alerting, scheduler overlap, and secret redaction.
 - **Chapter 14 — Measure What Was Actually Built:** implemented ([read it](chapters/14-measure-what-was-actually-built.md)). Run `python -m trades_lab chapter14` to compare Chapter 0 assumptions with observed repository structure.
-- **Chapter 15:** planned; final economic recalculation and conclusions have not been implemented.
+- **Chapter 15 — Customer-Specific Rules Stress Test:** implemented ([read it](chapters/15-customer-specific-rules-stress-test.md)). Run `python -m trades_lab chapter15` to inspect the bespoke-customer scenarios and structural change inventory.
+- **Chapter 16 — Integration-Access Stress Test:** planned; clean/difficult/closed access profiles and later economics have not been implemented.
 
 Suggested study path: read Chapter 0 and run its CLI, then read Chapter 1 and
 run the discovery briefing. Inspect why readiness changes before drawing a
@@ -181,6 +190,11 @@ schedules, and ownership are **MODELED ASSUMPTIONS**, not evidence of an actual 
 Then run Chapter 14 and inspect which units have multi-chapter use, which remain specialized,
 and which carry support obligations. Treat its units and ratio as repository evidence only:
 human time was not observed and the original 52.8% modeled effort assumption is not measured.
+Chapter 14 differs from the originally planned standardized-second-contractor experiment: its useful
+implementation inventory is preserved as additional evidence. The standardized-customer comparison
+still belongs in the future roadmap; Chapter 15 is specifically the bespoke-customer stress test.
+Then run Chapter 15 to compare unchanged infrastructure with specialized adapters, mappings, policies,
+workflow layers, validation, exceptions, and support. Its structural units are not labor or economics.
 Then read Chapter 3 and run its successful and failed lead scenarios. The bounded
 command, exceptions, provenance, correlation, and process-local replay behavior
 are the lab's first executable handoff evidence—not proof of real vendor
@@ -251,5 +265,7 @@ reporting-maintenance **SUPPORT SURFACE**; stale aggregation can reduce manageme
 Chapter 13 expands that surface to credential rotation, vendor-outage response, mapping drift,
 alert tuning and investigation, reconciliation/exception review, scheduler failures, observability
 maintenance, configuration changes, and runbook updates. Chapter 14 measures this support surface
-as tagged implementation units. Reusable runtime mechanisms are visible, but structural counts are
-not recurring support effort or contribution; Chapter 15 economics remain open.
+as tagged implementation units. Chapter 15 adds BidForge semantics, verbal-review handling, operations
+approval routing, kit definitions, paper-entry validation, billing-project membership, weak-ID rules,
+and crew-specific completion semantics. Reusable runtime mechanisms are visible, but structural counts
+are not recurring support effort or contribution; economics remain open.
