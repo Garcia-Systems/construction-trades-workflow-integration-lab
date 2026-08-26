@@ -6,9 +6,7 @@ meaningful transitions among existing CRM, estimating, scheduling, field,
 purchasing, and accounting systems **without becoming a bespoke workflow
 platform**, and whether the resulting complexity still supports the economics.
 Evidence may strengthen, weaken, or reject the hypothesis.
-Chapters 0–19 are implemented. Opportunity evaluation now compares process,
-configuration, native, low-code, narrow-custom, full-custom, and replacement
-alternatives before Chapter 20 supplies the still-unimplemented capstone verdict.
+Chapters 0–20 are implemented and the executable laboratory is complete. Chapter 20 synthesizes the engineering, variation, access, delivery, support, and alternative evidence into customer-qualified verdicts without claiming market validation.
 
 > **Fictional-customer notice:** James River Mechanical, its approximately 44
 > employees, seven field crews, people, systems, workflows, figures, vendors,
@@ -96,7 +94,7 @@ obligations, then tests the modeled $12,000 fee using explicit event/hour/cost s
 included-support versus change-request boundary. It issues no final market verdict.
 Chapter 19 adds an explainable build/buy/configure/integrate framework. Eight strategies, fictional
 alternatives, qualitative dimensions, disqualifiers, hybrids, and eight synthetic contractor scenarios
-show both where custom loses and where a full integration layer is defensible. It issues no overall verdict.
+show both where custom loses and where a full integration layer is defensible. Chapter 20 is the final synthesis: structurally the qualified opportunity resembles a repeatable project, while commercial readiness remains validate-in-discovery.
 
 ## Evidence vocabulary
 
@@ -138,6 +136,7 @@ python -m trades_lab chapter16
 python -m trades_lab chapter17
 python -m trades_lab chapter18
 python -m trades_lab chapter19
+python -m trades_lab chapter20
 ```
 
 The Chapter 0 CLI proves that its baseline is represented consistently and derives
@@ -211,7 +210,7 @@ adequate strategy within each synthetic scenario.
 - **Chapter 17 — Delivery Economics From Engineering Evidence:** implemented ([read it](chapters/17-delivery-economics-from-engineering-evidence.md)). Run `python -m trades_lab chapter17` to inspect category evidence and explicit delivery sensitivities.
 - **Chapter 18 — Support Economics:** implemented ([read it](chapters/18-support-economics.md)). Run `python -m trades_lab chapter18` to inspect recurring obligations, support sensitivities, and scope examples.
 - **Chapter 19 — Build, Buy, Configure, or Integrate?:** implemented ([read it](chapters/19-build-buy-configure-or-integrate.md)). Run `python -m trades_lab chapter19` to compare eight scenario-specific strategies.
-- **Chapter 20 — Capstone:** planned and not implemented; no overall opportunity verdict has been issued.
+- **Chapter 20 — Capstone: Project, Product, Configure, or Bad Idea?:** implemented ([read it](chapters/20-capstone-project-product-configure-or-bad-idea.md)). Run `python -m trades_lab chapter20` for the final synthesis, scenario verdicts, qualification profile, and discovery gate.
 
 Suggested study path: read Chapter 0 and run its CLI, then read Chapter 1 and
 run the discovery briefing. Inspect why readiness changes before drawing a
@@ -230,7 +229,7 @@ and which carry support obligations. Treat its units and ratio as repository evi
 human time was not observed and the original 52.8% modeled effort assumption is not measured.
 Chapter 14 differs from the originally planned standardized-second-contractor experiment: its useful
 implementation inventory is preserved as additional evidence. The standardized-customer comparison
-still belongs in the future roadmap; Chapter 15 is specifically the bespoke-customer stress test.
+is represented by the capstone’s standardized qualified scenario; Chapter 15 is specifically the bespoke-customer stress test.
 Then run Chapter 15 to compare unchanged infrastructure with specialized adapters, mappings, policies,
 workflow layers, validation, exceptions, and support. Its structural units are not labor or economics.
 Then run Chapter 16. The capability matrix demonstrates that interface quality changes technical
@@ -240,7 +239,7 @@ architecture to human action plus reconciliation. These results are structural e
 Then run Chapter 17. Compare qualitative category evidence with transparent sensitivity inputs; do not
 convert Chapter 14's unit ratio into labor reuse. Next run Chapter 18 and compare its standardized, mixed,
 and bespoke annual support sensitivities. Delivery and recurring support remain separate. Then run
-Chapter 19 to compare credible alternatives before the final opportunity verdict, which remains a Chapter 20 question.
+Chapter 19 to compare credible alternatives and Chapter 20 for the final evidence synthesis and qualification gate.
 Then read Chapter 3 and run its successful and failed lead scenarios. The bounded
 command, exceptions, provenance, correlation, and process-local replay behavior
 are the lab's first executable handoff evidence—not proof of real vendor
@@ -318,3 +317,14 @@ are not recurring support effort or contribution; economics remain open.
 Chapter 16 adds export delivery/monitoring, schema drift, partial acknowledgements, production-only
 testing, manual handoff ownership, reconciliation dependency, process training, and automation-expectation
 maintenance. It inventories support surface but calculates no support cost.
+
+
+## Final capstone verdict
+
+The structural opportunity class is **REPEATABLE_PROJECT** for qualified customers: shared identity, reliability, reconciliation, exception, and runtime mechanisms coexist with nontrivial adapters, mapping, configuration, testing, and onboarding. Current commercial readiness is separately **VALIDATE_IN_DISCOVERY** because actual burden, value, willingness to pay, vendor access, delivery hours, support demand, native coverage, and sales motion were not observed. See [Chapter 20](chapters/20-capstone-project-product-configure-or-bad-idea.md) for the traceable rules and scenario verdicts.
+
+The pattern appears appropriate when several operational systems must remain, repeated handoffs create measured meaningful burden, access and identity are workable, alternatives leave a valuable gap, variation stays mostly at edges, and management owns exceptions. Major disqualifiers are broad native/suite coverage, low volume or burden, closed consequential writes without a narrow edge, irresolvable identity, core-changing bespoke rules, and support expectations that exceed recurring economics.
+
+## What this lab proved — and what it did not prove
+
+The synthetic implementation proved that substantial reusable workflow-integration mechanisms can execute and that customer variation, access, delivery, support, and alternatives materially change the answer. It did **not** prove a product, a market, real vendor capability, measured labor reuse, measured customer value, repeatable sales, or that every contractor should buy custom software. The five evidence labels above remain distinct. Chapters 0–20 are complete; there is no Chapter 21.

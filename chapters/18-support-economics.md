@@ -96,4 +96,4 @@ still scale with customer count.
 No repository unit, adapter, file, test, or chapter is converted into hours. No measured incident
 frequency, support demand, labor rate, hosted cost, or market price exists. Scope enforcement still
 requires an actual contract. The scenarios do not produce a final opportunity or build-versus-buy
-verdict. Chapter 19 remains unimplemented.
+verdict. Chapter 19 subsequently screens alternatives, and Chapter 20 synthesizes the verdict.

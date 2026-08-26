@@ -80,4 +80,4 @@ Support now includes BidForge status semantics, verbal-review exceptions, operat
 
 ## Limitations and restraint
 
-The experiment is synthetic, process-local, and deliberately adversarial. It does not establish prevalence among real contractors, production reliability, human effort, support cost, or economic viability. No workflow DSL, rules engine, plugin platform, BPMN/approval engine, BOM system, or generic billing framework was introduced. Chapter 16's integration-access stress test, export/read-only fallbacks, economics, verdict, and capstone remain unimplemented.
+The experiment is synthetic, process-local, and deliberately adversarial. It does not establish prevalence among real contractors, production reliability, human effort, support cost, or economic viability. No workflow DSL, rules engine, plugin platform, BPMN/approval engine, BOM system, or generic billing framework was introduced. Later chapters test integration access, delivery/support economics, alternatives, and the capstone verdict.
