@@ -141,7 +141,7 @@ It is not automatically human-hours evidence.
 ### SENSITIVITY ASSUMPTION
 A hypothetical changed value used to test economics.
 
-### FICTIONAL ALTERNATIVE ASSUMPTION
+### MODELED ALTERNATIVE ASSUMPTION
 An unverified capability or price attributed to a hypothetical SaaS alternative.
 
 Chapter 0 currently observes only that Python can represent the assumptions,
@@ -166,4 +166,3 @@ supportable, and economically justified. The opportunity may weaken or fail if:
 
 Those claims remain unknown. Chapter 0 supplies a falsifiable baseline, not a
 verdict, and deliberately implements no Chapter 1 integration machinery.
-

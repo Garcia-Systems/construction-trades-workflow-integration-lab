@@ -134,7 +134,7 @@ def evidence_inventory() -> tuple[CapstoneEvidence, ...]:
         CapstoneEvidence("C20-ACCESS-CLOSED", 16, EvidenceCategory.OBSERVED_LAB_RESULT, "Closed consequential write access redesigns automation to a human packet/read-only edge.", "A positive full-custom verdict is unavailable.", EvidenceDirection.WEAKENS_OPPORTUNITY),
         CapstoneEvidence("C20-DELIVERY", 17, EvidenceCategory.SENSITIVITY_ASSUMPTION, "Standardized delivery is healthy; baseline/mixed are thin; bespoke is unattractive; constrained access requires redesign.", "Economics are customer-sensitive, not a new measured estimate.", EvidenceDirection.QUALIFIES_OPPORTUNITY),
         CapstoneEvidence("C20-SUPPORT", 18, EvidenceCategory.SENSITIVITY_ASSUMPTION, "The $12,000 fee can fit bounded support, while high-variance rules and access can consume it.", "Support scope must be bounded contractually.", EvidenceDirection.QUALIFIES_OPPORTUNITY),
-        CapstoneEvidence("C20-ALTERNATIVES", 19, EvidenceCategory.FICTIONAL_ALTERNATIVE_ASSUMPTION, "Modeled configuration, native, low-code and replacement choices can beat custom software.", "Screen alternatives before proposing custom work.", EvidenceDirection.WEAKENS_OPPORTUNITY),
+        CapstoneEvidence("C20-ALTERNATIVES", 19, EvidenceCategory.MODELED_ALTERNATIVE_ASSUMPTION, "Modeled configuration, native, low-code and replacement choices can beat custom software.", "Screen alternatives before proposing custom work.", EvidenceDirection.WEAKENS_OPPORTUNITY),
     )
 
 

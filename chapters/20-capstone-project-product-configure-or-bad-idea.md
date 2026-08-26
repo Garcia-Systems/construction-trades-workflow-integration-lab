@@ -40,7 +40,7 @@ The machine-readable report preserves four classes:
 1. **MODELED ASSUMPTION** — original customer, burden, value, price, fee, hours and reusable-effort claims.
 2. **OBSERVED LAB RESULT / OBSERVED IMPLEMENTATION STRUCTURE** — executable synthetic behavior and repository structure, never measured customer outcomes or labor.
 3. **SENSITIVITY ASSUMPTION** — changed hours, rates, support-event frequencies and contribution scenarios.
-4. **FICTIONAL ALTERNATIVE ASSUMPTION** — fictional suite, native, low-code and migration capabilities.
+4. **MODELED ALTERNATIVE ASSUMPTION** — fictional suite, native, low-code and migration capabilities.
 
 ## Strongest evidence
 

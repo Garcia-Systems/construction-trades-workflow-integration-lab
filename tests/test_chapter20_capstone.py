@@ -27,7 +27,7 @@ def test_inventory_has_all_directions_and_distinct_categories():
             EvidenceDirection.QUALIFIES_OPPORTUNITY} <= {x.direction for x in evidence}
     assert {EvidenceCategory.MODELED_ASSUMPTION, EvidenceCategory.OBSERVED_LAB_RESULT,
             EvidenceCategory.OBSERVED_IMPLEMENTATION_STRUCTURE, EvidenceCategory.SENSITIVITY_ASSUMPTION,
-            EvidenceCategory.FICTIONAL_ALTERNATIVE_ASSUMPTION} <= {x.category for x in evidence}
+            EvidenceCategory.MODELED_ALTERNATIVE_ASSUMPTION} <= {x.category for x in evidence}
 
 
 def test_scorecard_is_deterministic_and_qualitative():
