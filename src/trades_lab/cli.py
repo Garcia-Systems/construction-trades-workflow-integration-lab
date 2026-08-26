@@ -18,6 +18,11 @@ from trades_lab.chapter10 import ReconciliationSeverity, Reconciler
 from trades_lab.chapter11 import (BusinessImpact, ExceptionWorkflow, OwnerRole,
                                   ResolutionAction, age_bucket)
 from trades_lab.chapter12 import build_briefing
+from trades_lab.chapter13 import (Capability, LocalScheduler, RunOutcome, ScheduledTask,
+    build_metric_snapshot, due_tasks, evaluate_alerts, health_report, lookup_runbook,
+    structured_log, validate_startup)
+from trades_lab.fixtures.chapter13 import (CONFIG, CREDENTIALS, HEALTHY_DEPENDENCIES,
+    LEDGERPRO_OUTAGE, MISSING_ESTIMATEWORKS_CREDENTIALS, NOW, SCHEDULE, SUPPLYDESK_OUTAGE)
 from trades_lab.fixtures.chapter12 import DEGRADED_EVIDENCE, GENERATED_AT, HEALTHY_EVIDENCE
 from trades_lab.domain import ExceptionCategory, ExceptionRecord, ExceptionStatus
 from datetime import datetime, timezone
@@ -651,9 +656,65 @@ def render_chapter12() -> str:
     return "\n".join(lines)
 
 
+def render_chapter13() -> str:
+    healthy = health_report(CONFIG, CREDENTIALS, HEALTHY_DEPENDENCIES)
+    missing = health_report(CONFIG, MISSING_ESTIMATEWORKS_CREDENTIALS, HEALTHY_DEPENDENCIES)
+    supply = health_report(CONFIG, CREDENTIALS, SUPPLYDESK_OUTAGE)
+    ledger = health_report(CONFIG, CREDENTIALS, LEDGERPRO_OUTAGE)
+    cap = lambda report, name: next(x.state.value for x in report.capabilities if x.capability is name)
+    metrics = build_metric_snapshot(DEGRADED_EVIDENCE, NOW)
+    uncertain = next(a for a in evaluate_alerts(metrics, uncertain_evidence=("DEL-104",))
+                     if a.category == "UNCERTAIN_WRITE")
+    overdue = next(a for a in evaluate_alerts(metrics,
+        overdue_evidence=(("EXC-015", OwnerRole.OPERATIONS_MANAGER),)) if a.category == "EXCEPTION_AGING")
+    scheduler = LocalScheduler(); first = scheduler.begin(ScheduledTask.RECONCILIATION, NOW)
+    second = scheduler.begin(ScheduledTask.RECONCILIATION, NOW)
+    completed = scheduler.finish(first, NOW.replace(minute=5), "RECON-REPORT-013")
+    secret = "synthetic-never-log-this"
+    record = structured_log(NOW, "INFO", "CREDENTIAL_CHECK", context={
+        "credential_reference": "estimateworks-api", "credential_value": secret})
+    runbook = lookup_runbook("AUTHENTICATION")
+    return "\n".join((
+        "CONSTRUCTION / TRADES WORKFLOW INTEGRATION LAB", "Chapter 13 — Production Integration Engineering", "",
+        "SCENARIO A — HEALTHY STARTUP", "", f"Environment: {CONFIG.environment}",
+        f"Startup: {validate_startup(CONFIG, CREDENTIALS).state.value}", f"Liveness: {healthy.liveness.value}",
+        f"Readiness: {healthy.readiness.value}", "CAPABILITIES",
+        *(f"- {x.capability.value}: {x.state.value}" for x in healthy.capabilities), "",
+        "SCENARIO B — MISSING CRITICAL CREDENTIAL", "", "Credential reference: estimateworks-api",
+        f"Startup: {validate_startup(CONFIG, MISSING_ESTIMATEWORKS_CREDENTIALS).state.value}",
+        f"Readiness: {missing.readiness.value}", f"Lead → Estimate: {cap(missing, Capability.LEAD_TO_ESTIMATE)}",
+        "Diagnostic: unresolvable credential reference: estimateworks-api", "Secret value logged: NO", "",
+        "SCENARIO C — SUPPLYDESK OUTAGE", "", f"Liveness: {supply.liveness.value}",
+        f"Readiness: {supply.readiness.value}", f"Material handoff: {cap(supply, Capability.MATERIAL_HANDOFF)}",
+        f"Estimate → Job: {cap(supply, Capability.ESTIMATE_TO_JOB)}", f"Job → Schedule: {cap(supply, Capability.JOB_TO_SCHEDULE)}",
+        f"Field Status: {cap(supply, Capability.FIELD_STATUS)}", "",
+        "SCENARIO D — LEDGERPRO OUTAGE", "", f"Liveness: {ledger.liveness.value}",
+        f"Readiness: {ledger.readiness.value}", f"Invoice Readiness: {cap(ledger, Capability.INVOICE_READINESS)}",
+        f"Estimate → Job: {cap(ledger, Capability.ESTIMATE_TO_JOB)}", "Dependency alert: CRITICAL", "",
+        "SCENARIO E — UNCERTAIN WRITE", "", f"Alert: {uncertain.severity.value}",
+        f"Evidence: {uncertain.evidence_reference}", f"Recommended action: {uncertain.recommended_action}", "Blind replay: NO", "",
+        "SCENARIO F — OVERDUE EXCEPTION", "", f"Alert: {overdue.severity.value}",
+        f"Evidence: {overdue.evidence_reference}", f"Owner: {overdue.owner.value}", "",
+        "SCENARIO G — SCHEDULED RECONCILIATION", "", "Due tasks: " + ", ".join(x.value for x in due_tasks(SCHEDULE, NOW)),
+        f"Run: {completed.run_id} / {completed.outcome.value}", f"Report: {completed.evidence_reference}", "",
+        "SCENARIO H — SCHEDULER OVERLAP", "", f"First reconciliation: {first.outcome.value}",
+        f"Second reconciliation: {second.outcome.value}", "Coordination: PROCESS-LOCAL MODELED LEASE", "",
+        "SCENARIO I — SECRET SAFETY", "", "Credential reference: estimateworks-api",
+        f"Credential value logged: {'YES' if secret in record.to_json() else 'NO'}", "",
+        "SCENARIO J — RECOVERY RUNBOOK", "", f"Category: {runbook.category}", f"Owner: {runbook.owner.value}",
+        f"Safe first action: {runbook.safe_first_action}", f"Do not: {runbook.action_not_to_take}", "",
+        "OPERATIONAL METRICS", *(f"- {m.name}: {m.value}" for m in metrics.metrics), "",
+        "MODELED ASSUMPTION", "Deployment settings, credentials, dependencies, capability graph, schedules, thresholds, and ownership.", "",
+        "OBSERVED LAB RESULT", "Production operability requires configuration validation, dependency health, capability-aware degradation,",
+        "structured evidence, bounded metrics, alerts, scheduled controls, and recovery procedures beyond workflow logic.",
+        "These mechanisms add reusable infrastructure and an ongoing support surface.",
+        "This is a deterministic production-like simulation, not a deployed production service."
+    ))
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run executable textbook chapters")
-    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10", "chapter11", "chapter12"))
+    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10", "chapter11", "chapter12", "chapter13"))
     args = parser.parse_args(argv)
     if args.chapter == "chapter0":
         print(render_chapter0())
@@ -681,4 +742,6 @@ def main(argv: list[str] | None = None) -> int:
         print(render_chapter11())
     elif args.chapter == "chapter12":
         print(render_chapter12())
+    elif args.chapter == "chapter13":
+        print(render_chapter13())
     return 0
