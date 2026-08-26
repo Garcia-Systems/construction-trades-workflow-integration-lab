@@ -23,6 +23,11 @@ from trades_lab.chapter13 import (Capability, LocalScheduler, RunOutcome, Schedu
     structured_log, validate_startup)
 from trades_lab.chapter14 import (CHANGE_SCENARIOS, EvidenceLevel,
     ImplementationClassification, ReuseScope, build_report, reuse_matrix)
+from trades_lab.chapter15 import (BidForgeAdapter, CORE_IMPACT, SUPPORT_SURFACE,
+    OfficeCompletionAdapter, TidewaterKitExpander, aggregate_billing_project, change_inventory,
+    interpret_done, schedule_gate)
+from trades_lab.fixtures.chapter15 import (BILLING_PROJECT_JOBS, PAPER_COMPLETION, WEAK_IDENTITY_2025,
+                                            WEAK_IDENTITY_2026)
 from trades_lab.fixtures.chapter13 import (CONFIG, CREDENTIALS, HEALTHY_DEPENDENCIES,
     LEDGERPRO_OUTAGE, MISSING_ESTIMATEWORKS_CREDENTIALS, NOW, SCHEDULE, SUPPLYDESK_OUTAGE)
 from trades_lab.fixtures.chapter12 import DEGRADED_EVIDENCE, GENERATED_AT, HEALTHY_EVIDENCE
@@ -759,9 +764,61 @@ def render_chapter14() -> str:
     ))
 
 
+def render_chapter15() -> str:
+    adapter = BidForgeAdapter()
+    blocked, approved = schedule_gate(True, False), schedule_gate(True, True)
+    kit = TidewaterKitExpander().expand("TSS-KIT-A")
+    billing = aggregate_billing_project("BP-100", BILLING_PROJECT_JOBS)
+    paper = OfficeCompletionAdapter().adapt(PAPER_COMPLETION)
+    digital, legacy = interpret_done("DIGITAL_SERVICE_CREW", "DONE"), interpret_done("LEGACY_CREW", "DONE")
+    inventory = change_inventory()
+    labels = (("Unchanged reused units", "unchanged_reused_units"),
+              ("Configuration-only", "configuration_only"), ("New mappings", "new_mappings"),
+              ("New adapters", "new_adapters"), ("Workflow-specific extensions", "workflow_specific_extensions"),
+              ("Customer-specific rules", "customer_specific_rules"), ("Shared-core changes", "shared_core_changes"),
+              ("Support-surface additions", "support_surface_additions"))
+    return "\n".join((
+        "CONSTRUCTION / TRADES WORKFLOW INTEGRATION LAB", "Chapter 15 — Customer-Specific Rules Stress Test", "",
+        "CUSTOMER", "Tidewater Specialty Services", "", "Purpose:", "Deliberately stress the reusable architecture.", "",
+        "ESTIMATE ACCEPTANCE", "SIGNED", f"→ {adapter.acceptance_decision('SIGNED').value}",
+        "CUSTOMER_VERBAL_OK", f"→ {adapter.acceptance_decision('CUSTOMER_VERBAL_OK').value}",
+        "Shared mapping mechanism: REUSED", "Acceptance policy: CUSTOMER_SPECIFIC", "",
+        "EARLY JOB CREATION", "Selected: Approach B — Tidewater pre-authorization state outside shared handoff",
+        "PROSPECTIVE_JOB forced into JOB_PENDING: NO", "Shared canonical model changed: NO", "",
+        "SCHEDULING", "Authorized: YES", "Operations approval: NO",
+        f"Schedule request: {blocked.request_status}", f"Exception: {blocked.exception}",
+        "After approval:", approved.request_status, "Scheduling boundary and idempotency: REUSED", "",
+        "MATERIAL KIT", "Source: TSS-KIT-A", f"Expanded requirements: {len(kit.lines)}",
+        f"Mapped: {kit.mapped}", f"Unresolved: {kit.unresolved}", f"Result: {kit.status}",
+        f"Exception: {kit.exception}", "One-to-many specialization: CUSTOMER_SPECIFIC", "",
+        "PAPER-DERIVED COMPLETION", f"Source: {paper.source_system}",
+        f"Accepted: {'YES' if paper.accepted else 'NO'}",
+        f"Entered by role: {dict(paper.provenance)['entered_by_role']}",
+        f"Source document reference: {dict(paper.provenance)['source_document_reference']}", "",
+        "WEAK IDENTITY", "WORK-001 / RESIDENTIAL / 2026", "WORK-001 / COMMERCIAL / 2025",
+        f"Same canonical identity: {'YES' if WEAK_IDENTITY_2026 == WEAK_IDENTITY_2025 else 'NO'}", "",
+        "BILLING PROJECT", billing.project_id, f"Jobs: {len(BILLING_PROJECT_JOBS)}", f"Ready: {billing.ready_jobs}",
+        f"Blocked: {billing.blocked_jobs}", f"Billing project ready: {'YES' if billing.ready else 'NO'}",
+        f"Invoice created: {'YES' if billing.invoice_created else 'NO'}", "",
+        "COMPLETION SEMANTICS", "Digital DONE invoice eligible: " + ("YES" if digital.invoice_eligible else "NO"),
+        "Legacy DONE invoice eligible: " + ("YES" if legacy.invoice_eligible else "NO"), "",
+        "REUSE STRESS TEST", *(f"{label}: {inventory[key]}" for label, key in labels), "",
+        "CORE IMPACT", CORE_IMPACT, "Customer rules remained in a Chapter 15 edge module; shared domain files changed: 0.", "",
+        "SUPPORT SURFACE", *(f"- {item}" for item in SUPPORT_SURFACE), "",
+        "ORIGINAL HYPOTHESIS: meaningful reusable delivery", "STRESS TEST: deliberately unusual customer", "",
+        "OBSERVED LAB RESULT",
+        "Shared reliability, correlation, idempotency, exception, and scheduling-boundary patterns remain meaningful.",
+        "Adapters, policies, one-to-many mapping, manual validation, aggregation, and identity context add specialized structure.",
+        "The core survives, but expensive customer edges remain an unresolved economic question; no hours or dollars are inferred.", "",
+        "MODELED ASSUMPTION",
+        "Tidewater, BidForge, its approvals, kits, paper process, billing projects, identifiers, and crew semantics are synthetic.",
+        "Chapter 16 integration-access profiles are not implemented."
+    ))
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run executable textbook chapters")
-    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10", "chapter11", "chapter12", "chapter13", "chapter14"))
+    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10", "chapter11", "chapter12", "chapter13", "chapter14", "chapter15"))
     args = parser.parse_args(argv)
     if args.chapter == "chapter0":
         print(render_chapter0())
@@ -793,4 +850,6 @@ def main(argv: list[str] | None = None) -> int:
         print(render_chapter13())
     elif args.chapter == "chapter14":
         print(render_chapter14())
+    elif args.chapter == "chapter15":
+        print(render_chapter15())
     return 0
