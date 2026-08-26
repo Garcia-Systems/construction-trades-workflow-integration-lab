@@ -62,6 +62,8 @@ Chapter 8 adds explainable invoice-readiness validation and an idempotent Ledger
 billing-work-item handoff. LedgerPro remains authoritative; no invoice creation exists.
 Chapter 9 adds deterministic fault scripts, explicit failure categories, bounded retry, replay,
 and targeted uncertain-outcome lookup. It is not a production messaging platform.
+Chapter 10 adds read-oriented reconciliation across authoritative snapshots, logical delivery
+history, and unresolved exceptions. It reports inconsistencies and performs no repair.
 
 ## Evidence vocabulary
 
@@ -93,6 +95,7 @@ python -m trades_lab chapter6
 python -m trades_lab chapter7
 python -m trades_lab chapter8
 python -m trades_lab chapter9
+python -m trades_lab chapter10
 ```
 
 The Chapter 0 CLI proves that its baseline is represented consistently and derives
@@ -114,6 +117,8 @@ Chapter 8 contrasts fully ready, partial completion, missing accounting identity
 material/metadata blockers, exact replay, and a customer-approval change.
 Chapter 9 contrasts temporary outage, timeout-before-write, acknowledgement loss,
 no-lookup uncertainty, permanent/conflict/authentication stops, and retry exhaustion.
+Chapter 10 contrasts a clean workflow with missing, conflicting, exhausted, unresolved,
+and orphaned state; successful execution history is distinct from current consistency.
 
 ## Chapter index and study path
 
@@ -127,8 +132,8 @@ no-lookup uncertainty, permanent/conflict/authentication stops, and retry exhaus
 - **Chapter 7 — Field Status to Office:** implemented ([read it](chapters/07-field-status-to-office.md)). Run `python -m trades_lab chapter7` to study blocked, partial, complete, replay, repeated-state, and stale-event scenarios.
 - **Chapter 8 — Completion to Invoice Readiness:** implemented ([read it](chapters/08-completion-to-invoice-readiness.md)). Run `python -m trades_lab chapter8` to compare fully ready, partial-completion, missing-accounting-identity, replay, and approval-change scenarios.
 - **Chapter 9 — Failure, Retry, and Replay:** implemented ([read it](chapters/09-failure-retry-and-replay.md)). Run `python -m trades_lab chapter9` to compare bounded recovery, targeted lookup, blocked uncertainty, and exhaustion.
-- **Chapter 10:** planned; general reconciliation is not implemented.
-- **Chapters 11–20:** planned; not implemented. Later work will introduce behavior progressively without assuming a favorable outcome.
+- **Chapter 10 — Reconciliation:** implemented ([read it](chapters/10-reconciliation.md)). Run `python -m trades_lab chapter10` to compare clean and broken authoritative snapshots.
+- **Chapters 11–20:** planned; Chapter 11 exception handling remains unimplemented; not implemented. Later work will introduce behavior progressively without assuming a favorable outcome.
 
 Suggested study path: read Chapter 0 and run its CLI, then read Chapter 1 and
 run the discovery briefing. Inspect why readiness changes before drawing a
@@ -186,3 +191,14 @@ It adds no measured savings and does not recalculate later-chapter economics.
 The original verdict, **PROMISING — VALIDATE IN DISCOVERY**, is a modeled starting
 hypothesis—not a conclusion. Even a technically successful implementation does
 not automatically demonstrate a repeatable or attractive custom-software market.
+
+
+## Reconciliation and support surface
+
+Chapter 10 reuses stable external references, schedule/material request identity, field
+provenance, readiness fingerprints, correlation, exception records, and Chapter 9 logical
+delivery states. Its new structure is workflow-specific relationship checking rather than a
+generic data-quality platform. Running reconciliation, inspecting recurring mismatches,
+repairing access or mappings, deciding safe replay, and coordinating review are ongoing
+**SUPPORT SURFACE** obligations. Findings and actions are advisory: no background daemon,
+automatic repair, or Chapter 11 exception-resolution workflow is present.
