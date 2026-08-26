@@ -14,6 +14,8 @@ from trades_lab.chapter6 import MaterialsHandoff
 from trades_lab.chapter7 import FieldStatusHandoff
 from trades_lab.chapter8 import InvoiceReadinessService, ReadinessException, VALUE_MECHANISM
 from trades_lab.chapter9 import (Fault, FaultScriptDestination, ReliableHandoff)
+from trades_lab.chapter10 import ReconciliationSeverity, Reconciler
+from trades_lab.fixtures.chapter10 import BROKEN_SNAPSHOT, CLEAN_SNAPSHOT
 from trades_lab.domain.states import (EstimateState, JobState, map_estimateworks_state,
                                       map_fieldtrack_state)
 from trades_lab.domain.transitions import can_transition, validate_transition, TransitionError
@@ -516,9 +518,43 @@ def render_chapter9() -> str:
     ))
 
 
+def render_chapter10() -> str:
+    reconciler = Reconciler()
+    clean = reconciler.reconcile(CLEAN_SNAPSHOT)
+    broken = reconciler.reconcile(BROKEN_SNAPSHOT)
+    lines = [
+        "CONSTRUCTION / TRADES WORKFLOW INTEGRATION LAB",
+        "Chapter 10 — Reconciliation", "",
+        "SCENARIO A — CLEAN WORKFLOW", "",
+        f"Accepted estimates checked: {clean.checked_counts.accepted_estimates}",
+        f"Jobs checked: {clean.checked_counts.jobs}",
+        f"Scheduling checks: {clean.checked_counts.scheduling}",
+        f"Material checks: {clean.checked_counts.materials}",
+        f"Completed jobs checked: {clean.checked_counts.completed_jobs}",
+        f"Critical findings: {clean.critical_count}", f"Warnings: {clean.warning_count}",
+        "Result: CONSISTENT" if not clean.findings else "Result: FINDINGS", "",
+        "SCENARIO B — BROKEN WORKFLOW",
+    ]
+    for finding in broken.findings:
+        lines.extend(("", finding.severity.value, finding.reconciliation_id, finding.category.value,
+                      f"{finding.entity_type}: {finding.entity_id}", finding.summary,
+                      f"Expected: {finding.expected_state}", f"Observed: {finding.observed_state}",
+                      f"Correlation: {finding.correlation_id or 'none'}",
+                      f"Recommended action: {finding.recommended_action.value}"))
+    lines.extend(("", "SUMMARY", f"Critical: {broken.critical_count}",
+                  f"Warnings: {broken.warning_count}",
+                  f"Automatic repairs performed: {broken.automatic_repairs_performed}", "",
+                  "OBSERVED LAB RESULT",
+                  "Successful handoff history alone is not enough to prove current consistency.",
+                  "Authoritative snapshots expose missing, conflicting, exhausted, orphaned, and unresolved state.",
+                  "The reconciliation is read-oriented and performs no automatic repair.", "",
+                  "MODELED ASSUMPTIONS: snapshots, severity and expectation rules, and recommended actions."))
+    return "\n".join(lines)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run executable textbook chapters")
-    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9"))
+    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10"))
     args = parser.parse_args(argv)
     if args.chapter == "chapter0":
         print(render_chapter0())
@@ -540,4 +576,6 @@ def main(argv: list[str] | None = None) -> int:
         print(render_chapter8())
     elif args.chapter == "chapter9":
         print(render_chapter9())
+    elif args.chapter == "chapter10":
+        print(render_chapter10())
     return 0
