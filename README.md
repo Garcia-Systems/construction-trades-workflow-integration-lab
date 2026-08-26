@@ -52,6 +52,9 @@ acknowledgement carrying CrewBoard's authoritative job ID.
 Chapter 5 transfers validated job requirements into an acknowledged CrewBoard
 schedule request. A request may remain `UNASSIGNED`: CrewBoard or a dispatcher—not
 the integration—owns assignment.
+Chapter 6 adds exact material-identity mapping, explicit unit normalization, partial
+readiness, and an acknowledged SupplyDesk material-request boundary. It does not
+purchase, track inventory, or select substitutes.
 
 ## Evidence vocabulary
 
@@ -79,6 +82,7 @@ python -m trades_lab chapter2
 python -m trades_lab chapter3
 python -m trades_lab chapter4
 python -m trades_lab chapter5
+python -m trades_lab chapter6
 ```
 
 The Chapter 0 CLI proves that its baseline is represented consistently and derives
@@ -92,6 +96,8 @@ Chapter 4 compares first creation, two forms of replay, stale input, and conflic
 authoritative destination state.
 Chapter 5 compares an initial request, exact replay, changed context, assignment
 conflict, cancellation, and stale pre-cancellation input without choosing a crew.
+Chapter 6 contrasts direct and converted mappings with unknown, ambiguous,
+unsupported-unit and substitution stops, then demonstrates partial job readiness.
 
 ## Chapter index and study path
 
@@ -101,8 +107,9 @@ conflict, cancellation, and stale pre-cancellation input without choosing a crew
 - **Chapter 3 — Lead to Estimate:** implemented ([read it](chapters/03-lead-to-estimate.md)). Run `python -m trades_lab chapter3` to compare successful and explicitly stopped handoffs.
 - **Chapter 4 — Accepted Estimate to Job:** implemented ([read it](chapters/04-accepted-estimate-to-job.md)). Run `python -m trades_lab chapter4` and compare first delivery, duplicate delivery, and conflict.
 - **Chapter 5 — Job to Schedule:** implemented ([read it](chapters/05-job-to-schedule.md)). Run `python -m trades_lab chapter5` to contrast request acknowledgement, assignment, replay, and changed context.
-- **Chapter 6:** planned; not implemented.
-- **Chapters 7–20:** planned; not implemented. Later work will introduce behavior progressively without assuming a favorable outcome.
+- **Chapter 6 — Materials and Purchasing Handoff:** implemented ([read it](chapters/06-materials-and-purchasing-handoff.md)). Run `python -m trades_lab chapter6` to compare direct mapping, unknown identity, conversion, and partial readiness.
+- **Chapter 7:** planned; not implemented.
+- **Chapters 8–20:** planned; not implemented. Later work will introduce behavior progressively without assuming a favorable outcome.
 
 Suggested study path: read Chapter 0 and run its CLI, then read Chapter 1 and
 run the discovery briefing. Inspect why readiness changes before drawing a
@@ -125,6 +132,13 @@ provenance/events/exceptions, and Chapter 4's idempotency status reused cleanly.
 Eligibility, context fingerprints, cancellation, and assignment-conflict rules stayed
 workflow/destination-specific. That observed implementation structure makes reuse
 more testable but does not validate the original reusable-core percentage.
+Then run Chapter 6. Shared provenance, correlation, exception, idempotency, command,
+and acknowledgement shapes repeat, while material IDs, units, conversion factors,
+substitution rules, and the SupplyDesk boundary remain specialized. The reusable
+mapping mechanism is separately identifiable from customer-specific mapping content;
+retired products, new codes, and semantic changes are an explicit support surface.
+This mixed evidence strengthens narrow technical-mechanism reuse while weakening any
+assumption that mapping content itself will transfer between customers.
 
 The original verdict, **PROMISING — VALIDATE IN DISCOVERY**, is a modeled starting
 hypothesis—not a conclusion. Even a technically successful implementation does

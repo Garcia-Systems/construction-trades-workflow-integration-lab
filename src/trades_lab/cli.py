@@ -10,6 +10,7 @@ from trades_lab.chapter4 import (AcceptedEstimateToJobHandoff, CrewBoardSimulato
                                  DestinationJob, ServiceAddress)
 from trades_lab.chapter5 import (CrewBoardSchedulingSimulator, CrewSkill,
                                  JobToScheduleHandoff, ScheduleAssignment)
+from trades_lab.chapter6 import MaterialsHandoff
 from trades_lab.domain.states import (EstimateState, JobState, map_estimateworks_state,
                                       map_fieldtrack_state)
 from trades_lab.domain.transitions import can_transition, validate_transition, TransitionError
@@ -23,6 +24,10 @@ from trades_lab.fixtures.chapter4 import (MISSING_CUSTOMER_ESTIMATE, OPEN_ESTIMA
 from trades_lab.fixtures.chapter5 import (CANCELLED_JOB, CHANGED_DURATION_JOB,
                                           INVALID_WINDOW_JOB, MISSING_SKILL_JOB,
                                           PENDING_JOB, VALID_READY_JOB)
+from trades_lab.fixtures.chapter6 import (AMBIGUOUS_REQUIREMENT,
+    CHANGED_CONVERSION_REQUIREMENT, CONVERSION_REQUIREMENT, DIRECT_REQUIREMENT,
+    PARTIAL_REQUIREMENTS, REGISTRY, SUBSTITUTE_REQUIREMENT, UNKNOWN_REQUIREMENT,
+    UNIT_MISMATCH_REQUIREMENT)
 
 
 def _money(value: Decimal) -> str:
@@ -298,9 +303,67 @@ def render_chapter5() -> str:
     ))
 
 
+def render_chapter6() -> str:
+    handoff = MaterialsHandoff(REGISTRY)
+    direct = handoff.process(DIRECT_REQUIREMENT)
+    replay = handoff.process(DIRECT_REQUIREMENT)
+    replay_request_count = len(handoff.destination.requests)
+    conversion = handoff.process(CONVERSION_REQUIREMENT)
+    unknown = MaterialsHandoff(REGISTRY).process(UNKNOWN_REQUIREMENT)
+    mismatch = MaterialsHandoff(REGISTRY).process(UNIT_MISMATCH_REQUIREMENT)
+    ambiguous = MaterialsHandoff(REGISTRY).process(AMBIGUOUS_REQUIREMENT)
+    substitute = MaterialsHandoff(REGISTRY).process(SUBSTITUTE_REQUIREMENT)
+    partial = MaterialsHandoff(REGISTRY).process_job(PARTIAL_REQUIREMENTS)
+    changed_engine = MaterialsHandoff(REGISTRY)
+    original = changed_engine.process(CONVERSION_REQUIREMENT)
+    changed = changed_engine.process(CHANGED_CONVERSION_REQUIREMENT)
+    assert direct.command and direct.acknowledgement and conversion.command
+    assert unknown.exception and mismatch.exception and ambiguous.exception
+    return "\n".join((
+        "CONSTRUCTION / TRADES WORKFLOW INTEGRATION LAB",
+        "Chapter 6 — Materials and Purchasing Handoff", "",
+        "SCENARIO A — DIRECT APPROVED MAPPING", "",
+        f"Job: {DIRECT_REQUIREMENT.job_id}",
+        f"Source material: {DIRECT_REQUIREMENT.source_material_id}",
+        f"Destination material: {direct.command.destination_material_id}",
+        f"Quantity: {direct.command.quantity} {direct.command.unit.value}",
+        f"Outcome: {direct.outcome.value}",
+        f"SupplyDesk reference: {direct.acknowledgement.request_id}", "",
+        "SCENARIO B — EXACT REPLAY", "", f"Outcome: {replay.outcome.value}",
+        f"Destination requests after replay: {replay_request_count}", "",
+        "SCENARIO C — EXPLICIT UNIT CONVERSION", "",
+        f"Source: {CONVERSION_REQUIREMENT.quantity} {CONVERSION_REQUIREMENT.unit.value}",
+        f"Destination: {conversion.command.quantity} {conversion.command.unit.value}",
+        "Conversion rule: FEET-TO-100FT-ROLL (APPROVED)",
+        f"Outcome: {conversion.outcome.value}", "",
+        "SCENARIO D — UNKNOWN MATERIAL", "",
+        f"Source material: {UNKNOWN_REQUIREMENT.source_material_id}",
+        f"Outcome: {unknown.outcome.value}", f"Category: {unknown.exception.category.value}",
+        "Guessed destination: NO", "", "SCENARIO E — UNSUPPORTED UNIT", "",
+        f"Source: {UNIT_MISMATCH_REQUIREMENT.quantity} {UNIT_MISMATCH_REQUIREMENT.unit.value}",
+        f"Outcome: {mismatch.outcome.value}", "Destination request: NONE", "",
+        "SCENARIO F — AMBIGUOUS MAPPING", "", f"Outcome: {ambiguous.outcome.value}",
+        "Arbitrary destination selected: NO", "", "SCENARIO G — SUBSTITUTE SUGGESTED", "",
+        f"Outcome: {substitute.outcome.value}", "Automatic substitution: NO", "",
+        "SCENARIO H — PARTIAL JOB MATERIAL READINESS", "",
+        f"Requirements: {partial.requirement_count}", f"Ready: {partial.ready_count}",
+        f"Exceptions: {partial.exception_count}",
+        f"Overall integration readiness: {partial.readiness.value}", "",
+        "SCENARIO I — CHANGED QUANTITY", "",
+        f"Original SupplyDesk request: {original.acknowledgement.request_id}",
+        f"Changed outcome: {changed.outcome.value}",
+        "Previous handoff retained and linked: YES", "", "OBSERVED LAB RESULT", "",
+        "The mapping mechanism can be reusable while mapping content remains source- and",
+        "customer-specific. Unknown identity, ambiguous identity, unsupported units, and",
+        "unapproved substitutions stop automation. Valid siblings still proceed.", "",
+        "Material codes, equivalence, conversion factors, substitution and SupplyDesk",
+        "semantics are MODELED ASSUMPTIONS. No purchasing or inventory was implemented.",
+    ))
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run executable textbook chapters")
-    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5"))
+    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6"))
     args = parser.parse_args(argv)
     if args.chapter == "chapter0":
         print(render_chapter0())
@@ -314,4 +377,6 @@ def main(argv: list[str] | None = None) -> int:
         print(render_chapter4())
     elif args.chapter == "chapter5":
         print(render_chapter5())
+    elif args.chapter == "chapter6":
+        print(render_chapter6())
     return 0
