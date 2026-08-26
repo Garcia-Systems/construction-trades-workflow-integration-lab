@@ -1,5 +1,7 @@
 # Chapter 4 — Accepted Estimate to Job
 
+![Chapter 4 — Accepted Estimate to Job](../images/chapters/4.png)
+
 This is the lab's first **consequential write**. A job can drive scheduling,
 crews, materials, reporting, field work, and billing, so receiving a message is
 not equivalent to being safe to write. The experiment asks whether one accepted

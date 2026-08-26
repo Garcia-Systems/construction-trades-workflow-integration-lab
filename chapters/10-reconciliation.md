@@ -1,5 +1,7 @@
 # Chapter 10 — Reconciliation
 
+![Chapter 10 — Reconciliation](../images/chapters/10.png)
+
 **Reliable integration requires reconciliation after automation.** Retry attempts one known delivery; replay attempts the same logical handoff while preserving business identity; reconciliation independently asks whether authoritative systems agree about what should exist now. An acknowledgement is historical evidence, not permanent proof that a record still exists or that the wider workflow completed.
 
 ```text

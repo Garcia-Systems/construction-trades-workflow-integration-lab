@@ -1,5 +1,7 @@
 # Chapter 0 — The Hypothesis
 
+![Chapter 0 — The Hypothesis](../images/chapters/0.png)
+
 ## Status and question
 
 **Evidence category: MODELED ASSUMPTION.** The economic and delivery baseline in

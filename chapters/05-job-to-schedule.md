@@ -1,5 +1,7 @@
 # Chapter 5 — Job to Schedule
 
+![Chapter 5 — Job to Schedule](../images/chapters/5.png)
+
 > James River Mechanical, CrewBoard, its crew capabilities, interfaces, records,
 > scheduling windows, cancellation behavior, and rules in this chapter are synthetic
 > **MODELED ASSUMPTIONS**.

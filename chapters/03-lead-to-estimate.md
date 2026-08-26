@@ -1,5 +1,7 @@
 # Chapter 3 — Lead to Estimate
 
+![Chapter 3 — Lead to Estimate](../images/chapters/3.png)
+
 This is the lab's first operational handoff. It precedes the more consequential
 accepted-estimate-to-job transition because it stops at a validated destination
 command: it neither creates an estimate nor changes an external system. The lesson

@@ -1,5 +1,7 @@
 # Chapter 18 — Support Economics
 
+![Chapter 18 — Support Economics](../images/chapters/18.png)
+
 ## The recurring question
 
 Chapter 17 tested initial delivery economics. This chapter deliberately asks a different,

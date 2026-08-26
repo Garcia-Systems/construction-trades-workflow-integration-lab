@@ -1,5 +1,7 @@
 # Chapter 14 — Measure What Was Actually Built
 
+![Chapter 14 — Measure What Was Actually Built](../images/chapters/14.png)
+
 The reuse hypothesis must face the implementation that emerged, not the architecture we
 wished for. This chapter creates a deterministic, curated inventory of repository structures
 implemented through Chapter 13. It performs **structural measurement only**; Chapter 15 and

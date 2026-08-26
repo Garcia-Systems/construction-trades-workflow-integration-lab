@@ -1,5 +1,7 @@
 # Chapter 15 — Customer-Specific Rules Stress Test
 
+![Chapter 15 — Customer-Specific Rules Stress Test](../images/chapters/15.png)
+
 ## Purpose and evidence boundary
 
 Deliberately awkward customers are useful because mechanism reuse alone does not establish repeatable delivery. This chapter asks how quickly customer rules destroy repeatability by modeling **Tidewater Specialty Services**, a wholly fictional, synthetic contractor that is intentionally not representative. Its systems, policies, kits, records, and behavior are **MODELED ASSUMPTIONS**. Deterministic behavior demonstrated by the executable is an **OBSERVED LAB RESULT**.

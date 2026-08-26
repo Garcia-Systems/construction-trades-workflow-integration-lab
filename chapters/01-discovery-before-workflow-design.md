@@ -1,5 +1,7 @@
 # Chapter 1 — Discovery Before Workflow Design
 
+![Chapter 1 — Discovery Before Workflow Design](../images/chapters/1.png)
+
 > **Evidence discipline:** every capability, permission, latency, failure mode,
 > risk rating, and native-integration possibility below is a **MODELED
 > ASSUMPTION** about a fictional system. The validator and its deterministic

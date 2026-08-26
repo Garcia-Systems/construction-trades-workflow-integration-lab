@@ -1,5 +1,7 @@
 # Chapter 8 — Completion to Invoice Readiness
 
+![Chapter 8 — Completion to Invoice Readiness](../images/chapters/8.png)
+
 > All gates, identities, vendor capabilities, metadata, approval policies, evidence
 > semantics, and exception policies are **MODELED ASSUMPTIONS**.
 

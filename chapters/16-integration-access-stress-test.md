@@ -1,5 +1,7 @@
 # Chapter 16 — Integration Access Stress Test
 
+![Chapter 16 — Integration Access Stress Test](../images/chapters/16.png)
+
 API access is a business variable because it bounds achievable scope, recovery, rollout confidence,
 and ongoing support even when the business handoff is unchanged. All vendors and capabilities here
 are synthetic **MODELED ASSUMPTIONS**, not claims about real products.

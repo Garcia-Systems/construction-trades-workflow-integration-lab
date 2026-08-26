@@ -1,5 +1,7 @@
 # Chapter 20 — Capstone: Project, Product, Configure, or Bad Idea?
 
+![Chapter 20 — Capstone: Project, Product, Configure, or Bad Idea?](../images/chapters/20.png)
+
 This final chapter synthesizes Chapters 0–19; it does not revise their economics. A technically successful integration is not automatically a product, a good project, or something that should be built.
 
 ```text
