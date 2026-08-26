@@ -6,6 +6,8 @@ from decimal import Decimal
 from trades_lab.chapter0 import BASELINE_HYPOTHESIS
 from trades_lab.chapter1 import QUESTIONS, SYSTEMS, TRANSITIONS, QuestionStatus, baseline_readiness
 from trades_lab.chapter3 import LeadToEstimateHandoff
+from trades_lab.chapter4 import (AcceptedEstimateToJobHandoff, CrewBoardSimulator,
+                                 DestinationJob, ServiceAddress)
 from trades_lab.domain.states import (EstimateState, JobState, map_estimateworks_state,
                                       map_fieldtrack_state)
 from trades_lab.domain.transitions import can_transition, validate_transition, TransitionError
@@ -13,6 +15,9 @@ from trades_lab.fixtures.chapter2 import CUSTOMER, WORKFLOW_SNAPSHOT
 from trades_lab.fixtures.chapter3 import (AMBIGUOUS_IDENTITY_LEAD, INELIGIBLE_LEAD,
                                           MISSING_CONTACT_LEAD, UNKNOWN_STATE_LEAD,
                                           VALID_QUALIFIED_LEAD)
+from trades_lab.fixtures.chapter4 import (MISSING_CUSTOMER_ESTIMATE, OPEN_ESTIMATE,
+                                          STALE_ACCEPTED_ESTIMATE,
+                                          VALID_ACCEPTED_ESTIMATE)
 
 
 def _money(value: Decimal) -> str:
@@ -180,9 +185,59 @@ def render_chapter3() -> str:
     return "\n".join(lines)
 
 
+def render_chapter4() -> str:
+    handoff = AcceptedEstimateToJobHandoff()
+    first = handoff.process(VALID_ACCEPTED_ESTIMATE, "event-001")
+    replay = handoff.process(VALID_ACCEPTED_ESTIMATE, "event-001")
+    second_delivery = handoff.process(VALID_ACCEPTED_ESTIMATE, "event-002")
+    stale = handoff.process(STALE_ACCEPTED_ESTIMATE, "event-stale")
+    missing = AcceptedEstimateToJobHandoff().process(MISSING_CUSTOMER_ESTIMATE)
+    open_result = AcceptedEstimateToJobHandoff().process(OPEN_ESTIMATE)
+    conflict_destination = CrewBoardSimulator()
+    conflict_destination.preload_job(DestinationJob(
+        "JOB-8800", "legacy-reference", "EW-EST-2001", 3, "EW-CUST-842",
+        ServiceAddress("999 Conflicting Road", "Williamsburg", "VA", "23185"),
+        "Different scope"))
+    conflict_handoff = AcceptedEstimateToJobHandoff(conflict_destination)
+    conflict = conflict_handoff.process(VALID_ACCEPTED_ESTIMATE)
+    assert first.command and first.acknowledgement and replay.acknowledgement
+    return "\n".join((
+        "CONSTRUCTION / TRADES WORKFLOW INTEGRATION LAB",
+        "Chapter 4 — Accepted Estimate to Job", "", "CONSEQUENTIAL WRITE EXPERIMENT", "",
+        "Scenario A — First accepted estimate", "",
+        "Estimate: EW-EST-2001 / version 3", "Canonical state: ACCEPTED",
+        f"Idempotency key: {first.command.idempotency_key}", f"Result: {first.outcome.value}",
+        "Destination: CrewBoard",
+        f"Authoritative job: {first.acknowledgement.destination_job_id}",
+        f"Jobs created: {len(handoff.destination.jobs)}",
+        "Events: " + " → ".join(event.event_type for event in first.events), "",
+        "Scenario B — Exact replay", "", f"Result: {replay.outcome.value}",
+        f"Idempotency key: {replay.command.idempotency_key}",
+        f"Authoritative job: {replay.acknowledgement.destination_job_id}",
+        f"Jobs created: {len(handoff.destination.jobs)}", "",
+        "Scenario C — Separate delivery of same business event", "",
+        "Delivery IDs: event-001 / event-002", "Business idempotency identity: SAME",
+        f"Result: {second_delivery.outcome.value}",
+        f"Jobs created: {len(handoff.destination.jobs)}", "",
+        "Scenario D — Missing customer identity", "", f"Result: {missing.outcome.value}",
+        f"Category: {missing.exception.category.value}", "Jobs created: 0", "",
+        "Scenario E — Stale estimate", "", f"Result: {stale.outcome.value}",
+        f"Jobs created: {len(handoff.destination.jobs)}", "Destination rollback: NO", "",
+        "Scenario F — Conflicting destination state", "", f"Result: {conflict.outcome.value}",
+        f"Category: {conflict.exception.category.value}", "Automatic overwrite: NO",
+        f"Jobs created: {len(conflict_destination.jobs)}", "",
+        "Scenario G — Estimate not accepted", "", f"Result: {open_result.outcome.value}",
+        "Jobs created: 0", "", "OBSERVED LAB RESULT", "",
+        "Inside this modeled synthetic system, repeated delivery does not require a repeated",
+        "business effect when creation uses stable authoritative business identity.", "",
+        "The lab does not demonstrate exactly-once message delivery.",
+        "It demonstrates one intended job effect under modeled CrewBoard idempotency and lookup.",
+    ))
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run executable textbook chapters")
-    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3"))
+    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4"))
     args = parser.parse_args(argv)
     if args.chapter == "chapter0":
         print(render_chapter0())
@@ -192,4 +247,6 @@ def main(argv: list[str] | None = None) -> int:
         print(render_chapter2())
     elif args.chapter == "chapter3":
         print(render_chapter3())
+    elif args.chapter == "chapter4":
+        print(render_chapter4())
     return 0

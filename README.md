@@ -46,6 +46,9 @@ describes source observations; source systems still own business state.
 Chapter 3 adds the first source-specific adapter, `RiverLeadAdapter`, and first
 executable cross-system handoff boundary. It produces a validated EstimateWorks
 intake command, not an external estimate write.
+Chapter 4 adds a bounded consequential-write experiment: a stable accepted-estimate
+business key, CrewBoard lookup/idempotency, explicit conflict handling, and an
+acknowledgement carrying CrewBoard's authoritative job ID.
 
 ## Evidence vocabulary
 
@@ -71,6 +74,7 @@ python -m trades_lab chapter0
 python -m trades_lab chapter1
 python -m trades_lab chapter2
 python -m trades_lab chapter3
+python -m trades_lab chapter4
 ```
 
 The Chapter 0 CLI proves that its baseline is represented consistently and derives
@@ -80,6 +84,8 @@ handoffs. The Chapter 2 CLI displays deterministic state normalization, retained
 source identity, and allowed and rejected transitions. None of the commands proves
 fictional values or vendor capabilities. Chapter 3 compactly runs valid, replay,
 ineligible, missing-data, unknown-state, and ambiguous-identity scenarios.
+Chapter 4 compares first creation, two forms of replay, stale input, and conflicting
+authoritative destination state.
 
 ## Chapter index and study path
 
@@ -87,8 +93,9 @@ ineligible, missing-data, unknown-state, and ambiguous-identity scenarios.
 - **Chapter 1 — Discovery Before Workflow Design:** implemented ([read it](chapters/01-discovery-before-workflow-design.md)). Run `python -m trades_lab chapter1` to study the discovery briefing and blocked handoffs.
 - **Chapter 2 — Define the Canonical Workflow Model:** implemented ([read it](chapters/02-canonical-workflow-model.md)). Run `python -m trades_lab chapter2` to inspect the canonical snapshot.
 - **Chapter 3 — Lead to Estimate:** implemented ([read it](chapters/03-lead-to-estimate.md)). Run `python -m trades_lab chapter3` to compare successful and explicitly stopped handoffs.
-- **Chapter 4:** planned; not implemented.
-- **Chapters 5–20:** planned; not implemented. Later work will introduce behavior progressively without assuming a favorable outcome.
+- **Chapter 4 — Accepted Estimate to Job:** implemented ([read it](chapters/04-accepted-estimate-to-job.md)). Run `python -m trades_lab chapter4` and compare first delivery, duplicate delivery, and conflict.
+- **Chapter 5:** planned; not implemented.
+- **Chapters 6–20:** planned; not implemented. Later work will introduce behavior progressively without assuming a favorable outcome.
 
 Suggested study path: read Chapter 0 and run its CLI, then read Chapter 1 and
 run the discovery briefing. Inspect why readiness changes before drawing a
@@ -100,6 +107,11 @@ Then read Chapter 3 and run its successful and failed lead scenarios. The bounde
 command, exceptions, provenance, correlation, and process-local replay behavior
 are the lab's first executable handoff evidence—not proof of real vendor
 feasibility or general identity reconciliation.
+Then read Chapter 4 and contrast transport delivery IDs with the stable business
+key. CrewBoard's external-reference, lookup, permission, and acknowledgement
+capabilities are **MODELED ASSUMPTIONS**. One synthetic job surviving first
+delivery, replay, stale input, and conflict is an **OBSERVED LAB RESULT** inside
+that model—not an exactly-once delivery claim or evidence about a real vendor.
 
 The original verdict, **PROMISING — VALIDATE IN DISCOVERY**, is a modeled starting
 hypothesis—not a conclusion. Even a technically successful implementation does
