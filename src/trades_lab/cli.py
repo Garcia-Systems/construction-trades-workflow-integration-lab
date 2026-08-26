@@ -21,6 +21,8 @@ from trades_lab.chapter12 import build_briefing
 from trades_lab.chapter13 import (Capability, LocalScheduler, RunOutcome, ScheduledTask,
     build_metric_snapshot, due_tasks, evaluate_alerts, health_report, lookup_runbook,
     structured_log, validate_startup)
+from trades_lab.chapter14 import (CHANGE_SCENARIOS, EvidenceLevel,
+    ImplementationClassification, ReuseScope, build_report, reuse_matrix)
 from trades_lab.fixtures.chapter13 import (CONFIG, CREDENTIALS, HEALTHY_DEPENDENCIES,
     LEDGERPRO_OUTAGE, MISSING_ESTIMATEWORKS_CREDENTIALS, NOW, SCHEDULE, SUPPLYDESK_OUTAGE)
 from trades_lab.fixtures.chapter12 import DEGRADED_EVIDENCE, GENERATED_AT, HEALTHY_EVIDENCE
@@ -712,9 +714,54 @@ def render_chapter13() -> str:
     ))
 
 
+def render_chapter14() -> str:
+    report = build_report()
+    def counts(values):
+        return tuple(f"- {key.value}: {value}" for key, value in values.items())
+    scenario_lines = []
+    for scenario in CHANGE_SCENARIOS:
+        scenario_lines.extend((scenario.scenario_id,
+            "Unchanged: " + ", ".join(scenario.unchanged_units),
+            "Changed/added: " + ", ".join(scenario.changed_or_added_units),
+            f"Support surface: {scenario.support_surface_change}", scenario.interpretation, ""))
+    support_lines = tuple(
+        f"- {key.value}: {value}" for key, value in report.support_surface_by_primary.items() if value)
+    return "\n".join((
+        "CONSTRUCTION / TRADES WORKFLOW INTEGRATION LAB",
+        "Chapter 14 — Measure What Was Actually Built", "",
+        "ORIGINAL MODELED ASSUMPTION", "        ↓", "IMPLEMENTATION EVIDENCE",
+        "        ↓", "UPDATED INTERPRETATION", "",
+        "IMPLEMENTATION INVENTORY", f"Total curated implementation units: {len(report.units)}", "",
+        "PRIMARY CLASSIFICATION", *counts(report.classification_counts), "",
+        "EVIDENCE LEVEL", *counts(report.evidence_counts), "",
+        "REUSE SCOPE", *counts(report.reuse_scope_counts), "",
+        "REUSE MATRIX", reuse_matrix(), "",
+        "IMPORTANT", "IMPLEMENTATION UNITS ≠ ENGINEERING HOURS",
+        "Repository evidence and synthetic implementation units are inspectable; human engineering hours are not observed.",
+        "Lines, files, tests, commits, tokens, and units are not converted to time.", "",
+        "ORIGINAL HYPOTHESIS", "Evidence: MODELED ASSUMPTION",
+        f"Modeled reusable delivery effort: {report.original_modeled_reusable_effort}%", "",
+        "OBSERVED REPOSITORY EVIDENCE",
+        f"Observed cross-workflow reusable units: {report.observed_cross_workflow_count}",
+        f"{report.ratio_label}: {report.observed_cross_workflow_ratio * 100}%",
+        "Same denominator as 52.8%: NO", "Direct validation of 52.8%: NO",
+        f"Structural reuse confidence: {report.reuse_confidence.value}",
+        "The unit ratio counts curated structures; 52.8% modeled delivery effort. They cannot be equated.", "",
+        "SUPPORT SURFACE", f"Units carrying support obligations: {report.support_surface_count}",
+        *support_lines, "Reusable software can still create recurring support obligations.", "",
+        "CHANGE SIMULATIONS (MODELED ASSUMPTION)", *scenario_lines,
+        "NEGATIVE EVIDENCE", *(f"- {item}" for item in report.negative_evidence), "",
+        "OBSERVED LAB RESULT",
+        "The repository contains genuine cross-workflow reuse, but reusable mechanisms coexist with",
+        "source/destination adapters, workflow rules, customer configuration, and ongoing support obligations.",
+        "Repository structure tests the mechanism behind the reuse hypothesis; it does not measure labor reuse.",
+        "No human-hour, price, margin, payback, support-economics, or Chapter 15 conclusion is produced."
+    ))
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run executable textbook chapters")
-    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10", "chapter11", "chapter12", "chapter13"))
+    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10", "chapter11", "chapter12", "chapter13", "chapter14"))
     args = parser.parse_args(argv)
     if args.chapter == "chapter0":
         print(render_chapter0())
@@ -744,4 +791,6 @@ def main(argv: list[str] | None = None) -> int:
         print(render_chapter12())
     elif args.chapter == "chapter13":
         print(render_chapter13())
+    elif args.chapter == "chapter14":
+        print(render_chapter14())
     return 0

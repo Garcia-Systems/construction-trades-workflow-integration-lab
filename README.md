@@ -74,6 +74,9 @@ Chapter 13 wraps those application layers in a deterministic production-runtime 
 configuration and credential references, startup/health validation, capability-aware degradation,
 redacted logs, bounded metrics and alerts, scheduled run records, and recovery runbooks. It is not
 a real deployment and does not rewrite the earlier workflows.
+Chapter 14 inventories the implementation that actually emerged. Its curated units, chapter-use
+matrix, classifications, evidence levels, reuse scopes, change simulations, and support tags test
+structural reuse without treating repository counts as labor or implementing Chapter 15 economics.
 
 ## Evidence vocabulary
 
@@ -109,6 +112,7 @@ python -m trades_lab chapter10
 python -m trades_lab chapter11
 python -m trades_lab chapter12
 python -m trades_lab chapter13
+python -m trades_lab chapter14
 ```
 
 The Chapter 0 CLI proves that its baseline is represented consistently and derives
@@ -139,6 +143,9 @@ deterministic completion-to-readiness timing.
 Chapter 13 contrasts healthy startup, missing credentials, partial SupplyDesk/LedgerPro outages,
 uncertain-write and overdue-exception alerts, scheduled reconciliation and overlap prevention,
 secret redaction, and runbook lookup.
+Chapter 14 prints the machine-readable inventory summaries, reuse matrix, negative evidence,
+support surface, and bounded `MIXED` structural-confidence verdict. Its implementation-unit ratio
+has a different denominator from Chapter 0's modeled reusable-effort percentage.
 
 ## Chapter index and study path
 
@@ -156,7 +163,8 @@ secret redaction, and runbook lookup.
 - **Chapter 11 — Exception Workflow:** implemented ([read it](chapters/11-exception-workflow.md)). Run `python -m trades_lab chapter11` to inspect routing, resolution, audit, aging, replay eligibility, and rejected actions.
 - **Chapter 12 — Operational Briefing:** implemented ([read it](chapters/12-operational-briefing.md)). Run `python -m trades_lab chapter12` to compare healthy and degraded management snapshots.
 - **Chapter 13 — Production Integration Engineering:** implemented ([read it](chapters/13-production-integration-engineering.md)). Run `python -m trades_lab chapter13` to inspect healthy startup, partial outages, uncertain-write alerting, scheduler overlap, and secret redaction.
-- **Chapter 14:** planned; effort/reuse measurement and economic conclusions have not been implemented.
+- **Chapter 14 — Measure What Was Actually Built:** implemented ([read it](chapters/14-measure-what-was-actually-built.md)). Run `python -m trades_lab chapter14` to compare Chapter 0 assumptions with observed repository structure.
+- **Chapter 15:** planned; final economic recalculation and conclusions have not been implemented.
 
 Suggested study path: read Chapter 0 and run its CLI, then read Chapter 1 and
 run the discovery briefing. Inspect why readiness changes before drawing a
@@ -170,6 +178,9 @@ LedgerPro affects invoice readiness, why uncertainty points to reconciliation ra
 replay, and why the second local reconciliation run is skipped. The behavior is an **OBSERVED LAB
 RESULT** inside fixed production-like fixtures; dependency behavior, credentials, thresholds,
 schedules, and ownership are **MODELED ASSUMPTIONS**, not evidence of an actual deployment.
+Then run Chapter 14 and inspect which units have multi-chapter use, which remain specialized,
+and which carry support obligations. Treat its units and ratio as repository evidence only:
+human time was not observed and the original 52.8% modeled effort assumption is not measured.
 Then read Chapter 3 and run its successful and failed lead scenarios. The bounded
 command, exceptions, provenance, correlation, and process-local replay behavior
 are the lab's first executable handoff evidence—not proof of real vendor
@@ -239,5 +250,6 @@ Briefing rules, changed workflow states, categories, owners, priorities, and thr
 reporting-maintenance **SUPPORT SURFACE**; stale aggregation can reduce management trust.
 Chapter 13 expands that surface to credential rotation, vendor-outage response, mapping drift,
 alert tuning and investigation, reconciliation/exception review, scheduler failures, observability
-maintenance, configuration changes, and runbook updates. Reusable runtime mechanisms are visible,
-but recurring support revenue is not pure recurring contribution; Chapter 14 economics remain open.
+maintenance, configuration changes, and runbook updates. Chapter 14 measures this support surface
+as tagged implementation units. Reusable runtime mechanisms are visible, but structural counts are
+not recurring support effort or contribution; Chapter 15 economics remain open.
