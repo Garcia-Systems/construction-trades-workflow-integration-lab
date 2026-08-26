@@ -26,6 +26,9 @@ from trades_lab.chapter14 import (CHANGE_SCENARIOS, EvidenceLevel,
 from trades_lab.chapter15 import (BidForgeAdapter, CORE_IMPACT, SUPPORT_SURFACE,
     OfficeCompletionAdapter, TidewaterKitExpander, aggregate_billing_project, change_inventory,
     interpret_done, schedule_gate)
+from trades_lab.chapter16 import (CLEAN, CLOSED, DIFFICULT, RELIABILITY_MATRIX, SUPPORT,
+    SchemaDriftError, build_report as build_access_report, classify_access,
+    create_job_handoff_packet, evaluate_transition, parse_estimate_export, recommend_scope)
 from trades_lab.fixtures.chapter15 import (BILLING_PROJECT_JOBS, PAPER_COMPLETION, WEAK_IDENTITY_2025,
                                             WEAK_IDENTITY_2026)
 from trades_lab.fixtures.chapter13 import (CONFIG, CREDENTIALS, HEALTHY_DEPENDENCIES,
@@ -816,9 +819,57 @@ def render_chapter15() -> str:
     ))
 
 
+def render_chapter16() -> str:
+    handoff = "accepted estimate → job"
+    packet = create_job_handoff_packet("corr-16", "BF-EST-100", "CUST-9", "export-2026-08-26")
+    known = parse_estimate_export(
+        "estimate_id,status,customer_id,updated_at\nBF-EST-100,ACCEPTED,CUST-9,2026-08-26T01:00:00Z\n")
+    try:
+        parse_estimate_export(
+            "estimate_number,approval_status,customer_ref,last_modified\n100,YES,9,2026-08-26\n")
+    except SchemaDriftError as error:
+        drift = str(error)
+    lines = ["CONSTRUCTION / TRADES WORKFLOW INTEGRATION LAB",
+             "Chapter 16 — Integration Access Stress Test", "", "SAME BUSINESS HANDOFF:", handoff.upper()]
+    for profile in (CLEAN, DIFFICULT, CLOSED):
+        cap, result, scope = profile.capability, evaluate_transition(profile, handoff), recommend_scope(handoff, profile)
+        lines.extend(("", profile.label, f"Access risk: {classify_access(profile).value}",
+                      f"Write access: {cap.write_access.value}",
+                      f"Stable external reference: {'YES' if cap.external_reference_support else 'NO'}",
+                      f"Destination lookup: {'YES' if cap.lookup_support else 'NO'}",
+                      f"Sandbox: {'YES' if cap.sandbox_available else 'NO'}",
+                      f"Feasibility: {result.feasibility.value}",
+                      f"Safe blind replay: {'YES' if cap.safe_recovery else 'NO'}",
+                      f"Recommended scope: {scope.scope.value}", "Reasons:", *(f"- {r}" for r in result.reasons)))
+    lines.extend(("", "CSV EXPORT", f"Known v1 records: {len(known)}", "Timing: nightly batch (MODELED ASSUMPTION)",
+                  "", "CSV SCHEMA DRIFT", "Expected schema: v1", "Observed: changed headers",
+                  "Automatic guessing: NO", "Result: BLOCKED", f"Evidence: {drift}", "Support intervention: REQUIRED",
+                  "", "NO SANDBOX", "Difficult destination writes cannot be validated in a sandbox.",
+                  "Recommendation: dry-run / human confirmation; production-only testing is a support constraint.",
+                  "", "HUMAN-ASSISTED WRITE", f"Validated packet: {packet.packet_id}",
+                  f"Required action: {packet.required_action}",
+                  f"Destination write performed by integration: {'YES' if packet.destination_write_performed else 'NO'}",
+                  "Later read-only reconciliation: AVAILABLE", "", "RELIABILITY MATRIX",
+                  f"{'CAPABILITY':<28} {'CLEAN':<12} {'DIFFICULT':<12} CLOSED"))
+    lines.extend(f"{key:<28} {values[0]:<12} {values[1]:<12} {values[2]}" for key, values in RELIABILITY_MATRIX.items())
+    lines.append("")
+    lines.append("SUPPORT SURFACE")
+    for key in ("clean", "difficult", "closed"):
+        lines.extend((key.title() + ":", *(f"- {item}" for item in SUPPORT[key])))
+    lines.extend(("", f"Machine-readable transition results: {len(build_access_report().transition_results)}", "",
+                  "OBSERVED LAB RESULT",
+                  "The same business workflow moves from safe automation to constrained automation to a blocked direct write",
+                  "solely because modeled interface quality changes. Bounded human and read-only designs preserve some value.",
+                  "Access quality is a core feasibility variable, not an implementation detail.", "",
+                  "MODELED ASSUMPTION",
+                  "All profile capabilities, vendor behavior, batch timing, permissions, and native alternatives are synthetic.",
+                  "No hours, costs, prices, payback, support cost, or economic verdict are calculated. Chapter 17 is not implemented."))
+    return "\n".join(lines)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run executable textbook chapters")
-    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10", "chapter11", "chapter12", "chapter13", "chapter14", "chapter15"))
+    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10", "chapter11", "chapter12", "chapter13", "chapter14", "chapter15", "chapter16"))
     args = parser.parse_args(argv)
     if args.chapter == "chapter0":
         print(render_chapter0())
@@ -852,4 +903,6 @@ def main(argv: list[str] | None = None) -> int:
         print(render_chapter14())
     elif args.chapter == "chapter15":
         print(render_chapter15())
+    elif args.chapter == "chapter16":
+        print(render_chapter16())
     return 0
