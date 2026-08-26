@@ -1,5 +1,7 @@
 # Chapter 11 — Exception Workflow
 
+![Chapter 11 — Exception Workflow](../images/chapters/11.png)
+
 Human exceptions are not integration failure. **Uncontrolled exceptions are.** When safe
 automation stops, this chapter turns an ambiguous condition into a small, owned decision;
 it does not attempt to eliminate human work or become ticketing, CRM, workflow, or reporting software.

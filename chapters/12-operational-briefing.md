@@ -1,5 +1,7 @@
 # Chapter 12 — Operational Briefing
 
+![Chapter 12 — Operational Briefing](../images/chapters/12.png)
+
 The operational briefing answers **what should management pay attention to right now?** Reconciliation instead asks whether systems and handoffs are consistent. The exception workflow asks what human-review work exists and who owns it. The briefing consumes their immutable results; it does not reproduce reconciliation checks or become another truth store.
 
 ```text

@@ -1,5 +1,7 @@
 # Chapter 9 — Failure, Retry, and Replay
 
+![Chapter 9 — Failure, Retry, and Replay](../images/chapters/9.png)
+
 ## Question and boundary
 
 A retry loop cannot prove whether a consequential write happened. This chapter deliberately breaks the accepted-estimate → job boundary to ask whether a bounded integration can recover without duplicating a job, hiding uncertainty, or retrying permanent faults forever. The implementation is a synchronous, in-memory fault laboratory—not a production message platform. It wraps a selected create rather than rewriting Chapters 4–8 or implementing Chapter 10's general reconciliation process.

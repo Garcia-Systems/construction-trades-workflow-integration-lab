@@ -1,5 +1,7 @@
 # Chapter 2 — Define the Canonical Workflow Model
 
+![Chapter 2 — Define the Canonical Workflow Model](../images/chapters/2.png)
+
 > **MODELED ASSUMPTION:** All source names, state vocabularies, mappings, field
 > choices, workflow semantics, and records in this chapter are fictional.
 

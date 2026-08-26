@@ -1,5 +1,7 @@
 # Chapter 17 — Delivery Economics From Engineering Evidence
 
+![Chapter 17 — Delivery Economics From Engineering Evidence](../images/chapters/17.png)
+
 ## Question and evidence discipline
 
 What does the engineering evidence do to confidence in the original delivery economics? It constrains assumptions; it does not manufacture time sheets.

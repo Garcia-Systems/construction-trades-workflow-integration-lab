@@ -1,5 +1,7 @@
 # Chapter 6 — Materials and Purchasing Handoff
 
+![Chapter 6 — Materials and Purchasing Handoff](../images/chapters/6.png)
+
 > Every material code, unit, conversion, equivalence, substitution rule, SupplyDesk
 > interface behavior, and purchasing semantic here is synthetic **MODELED ASSUMPTION**.
 

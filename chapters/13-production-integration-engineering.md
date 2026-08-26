@@ -1,5 +1,7 @@
 # Chapter 13 — Production Integration Engineering
 
+![Chapter 13 — Production Integration Engineering](../images/chapters/13.png)
+
 ## Working logic is not an operable service
 
 Chapters 3–12 demonstrate workflow decisions, bounded writes, reliability, reconciliation,

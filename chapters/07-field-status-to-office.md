@@ -1,5 +1,7 @@
 # Chapter 7 — Field Status to Office
 
+![Chapter 7 — Field Status to Office](../images/chapters/7.png)
+
 ## Boundary and authority
 
 This chapter asks whether a bounded office-facing workflow can consume synthetic field signals without becoming a field-service or billing system. **FieldTrack remains authoritative for what its modeled crews reported in the field.** The operational job system remains authoritative for the job record. The integration owns only its observation, correlation, validation, event history, exception, and handoff acknowledgement.

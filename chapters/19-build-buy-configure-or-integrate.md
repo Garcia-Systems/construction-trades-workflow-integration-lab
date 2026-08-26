@@ -1,5 +1,7 @@
 # Chapter 19 — Build, Buy, Configure, or Integrate?
 
+![Chapter 19 — Build, Buy, Configure, or Integrate?](../images/chapters/19.png)
+
 Technical feasibility does not imply that custom development is the best solution. The business
 problem is compared with eight bounded strategies: `DO_NOTHING`, `PROCESS_CHANGE`,
 `CONFIGURE_EXISTING`, `NATIVE_INTEGRATION`, `LOW_CODE_INTEGRATION`, `NARROW_CUSTOM_EDGE`,
