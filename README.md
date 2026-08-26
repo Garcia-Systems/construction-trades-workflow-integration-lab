@@ -39,6 +39,11 @@ ACKNOWLEDGEMENT / EXCEPTION / HUMAN REVIEW
 
 **ORCHESTRATE TRANSITIONS, DO NOT REPLACE SYSTEMS.**
 
+Chapter 2 introduces a compact canonical model at that translation boundary:
+immutable identity and provenance, bounded state vocabularies, source-state
+mappings, explicit transition eligibility, and event/exception contracts. It
+describes source observations; source systems still own business state.
+
 ## Evidence vocabulary
 
 - **MODELED ASSUMPTION** — A fictional economic, effort, pricing, support, system-capability, permission, or vendor-behavior claim.
@@ -61,27 +66,31 @@ python -m pip install -e '.[test]'
 pytest
 python -m trades_lab chapter0
 python -m trades_lab chapter1
+python -m trades_lab chapter2
 ```
 
 The Chapter 0 CLI proves that its baseline is represented consistently and derives
 ratios and payback deterministically. The Chapter 1 discovery briefing validates
 authority, exposes modeled access risks and native alternatives, and gates future
-handoffs. Neither command proves fictional values or vendor capabilities.
+handoffs. The Chapter 2 CLI displays deterministic state normalization, retained
+source identity, and allowed and rejected transitions. None of the commands proves
+fictional values or vendor capabilities.
 
 ## Chapter index and study path
 
 - **Chapter 0 — The Hypothesis:** implemented ([read it](chapters/00-the-hypothesis.md)).
 - **Chapter 1 — Discovery Before Workflow Design:** implemented ([read it](chapters/01-discovery-before-workflow-design.md)). Run `python -m trades_lab chapter1` to study the discovery briefing and blocked handoffs.
-- **Chapter 2:** planned; not implemented.
-- **Chapters 3–20:** planned; not implemented. Later work will introduce behavior progressively without assuming a favorable outcome.
+- **Chapter 2 — Define the Canonical Workflow Model:** implemented ([read it](chapters/02-canonical-workflow-model.md)). Run `python -m trades_lab chapter2` to inspect the canonical snapshot.
+- **Chapter 3:** planned; not implemented.
+- **Chapters 4–20:** planned; not implemented. Later work will introduce behavior progressively without assuming a favorable outcome.
 
 Suggested study path: read Chapter 0 and run its CLI, then read Chapter 1 and
 run the discovery briefing. Inspect why readiness changes before drawing a
-workflow. Chapter 1 adds executable discovery validation as an **OBSERVED LAB
-RESULT**, while every source-system capability and risk remains a synthetic
-**MODELED ASSUMPTION**.
+workflow. Then read Chapter 2, inspect its source-state mappings, and run its CLI
+to compare allowed and rejected transitions. Executable validation is an
+**OBSERVED LAB RESULT**, while source capabilities, mappings, and workflow
+semantics remain synthetic **MODELED ASSUMPTIONS**.
 
 The original verdict, **PROMISING — VALIDATE IN DISCOVERY**, is a modeled starting
 hypothesis—not a conclusion. Even a technically successful implementation does
 not automatically demonstrate a repeatable or attractive custom-software market.
-
