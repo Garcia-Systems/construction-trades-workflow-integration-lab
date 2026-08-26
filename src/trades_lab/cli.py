@@ -11,6 +11,7 @@ from trades_lab.chapter4 import (AcceptedEstimateToJobHandoff, CrewBoardSimulato
 from trades_lab.chapter5 import (CrewBoardSchedulingSimulator, CrewSkill,
                                  JobToScheduleHandoff, ScheduleAssignment)
 from trades_lab.chapter6 import MaterialsHandoff
+from trades_lab.chapter7 import FieldStatusHandoff
 from trades_lab.domain.states import (EstimateState, JobState, map_estimateworks_state,
                                       map_fieldtrack_state)
 from trades_lab.domain.transitions import can_transition, validate_transition, TransitionError
@@ -28,6 +29,7 @@ from trades_lab.fixtures.chapter6 import (AMBIGUOUS_REQUIREMENT,
     CHANGED_CONVERSION_REQUIREMENT, CONVERSION_REQUIREMENT, DIRECT_REQUIREMENT,
     PARTIAL_REQUIREMENTS, REGISTRY, SUBSTITUTE_REQUIREMENT, UNKNOWN_REQUIREMENT,
     UNIT_MISMATCH_REQUIREMENT)
+from trades_lab.fixtures.chapter7 import CREW_MAPPINGS, JOB_MAPPINGS, event as field_event
 
 
 def _money(value: Decimal) -> str:
@@ -361,9 +363,59 @@ def render_chapter6() -> str:
     ))
 
 
+def render_chapter7() -> str:
+    handoff = FieldStatusHandoff(JOB_MAPPINGS, CREW_MAPPINGS)
+    dispatched = handoff.process(field_event("FT-EVT-7001", "EN_ROUTE", 1))
+    arrived = handoff.process(field_event("FT-EVT-7002", "ONSITE", 2))
+    started = handoff.process(field_event("FT-EVT-7003", "WORKING", 3))
+    blocked = handoff.process(field_event("FT-EVT-7004", "HOLD", 4, "MATERIAL_MISSING"))
+    resumed = handoff.process(field_event("FT-EVT-7005", "WORKING", 5))
+    partial = handoff.process(field_event("FT-EVT-7006", "PARTIAL", 6))
+    complete = handoff.process(field_event("FT-EVT-7007", "DONE", 7))
+    replay_engine = FieldStatusHandoff(JOB_MAPPINGS, CREW_MAPPINGS)
+    replay_raw = field_event("FT-EVT-REPLAY", "WORKING", 4)
+    first = replay_engine.process(replay_raw)
+    replay = replay_engine.process(replay_raw)
+    repeated = replay_engine.process(field_event("FT-EVT-REPEAT", "WORKING", 5))
+    stale = replay_engine.process(field_event("FT-EVT-STALE", "ONSITE", 3))
+    unknown = FieldStatusHandoff(JOB_MAPPINGS, CREW_MAPPINGS).process(
+        field_event("FT-EVT-UNKNOWN", "MYSTERY", 1))
+    identity = FieldStatusHandoff(JOB_MAPPINGS, CREW_MAPPINGS).process(
+        field_event("FT-EVT-NOJOB", "WORKING", 1, job_id="FT-JOB-UNKNOWN"))
+    return "\n".join((
+        "CONSTRUCTION / TRADES WORKFLOW INTEGRATION LAB",
+        "Chapter 7 — Field Status to Office", "",
+        "SCENARIO A — CREW DISPATCHED", "Source: FieldTrack / EN_ROUTE",
+        f"Canonical: {dispatched.office_update.field_status.value}",
+        f"Authoritative job: {dispatched.office_update.authoritative_job_id}",
+        f"Outcome: {dispatched.outcome.value}", "",
+        "SCENARIO B — WORK STARTED", f"Progression: {arrived.office_update.field_status.value} → {started.office_update.field_status.value}",
+        f"Outcome: {started.outcome.value}", "",
+        "SCENARIO C — BLOCKED", f"Canonical: {blocked.office_update.field_status.value}",
+        f"Reason: {blocked.office_update.blocked_reason.value}", "Office attention: REQUIRED", "",
+        "SCENARIO D — RESUME", "Progression: BLOCKED → IN_PROGRESS", f"Outcome: {resumed.outcome.value}", "",
+        "SCENARIO E — PARTIAL COMPLETION", f"Canonical: {partial.office_update.field_status.value}",
+        "Completed: NO", "Invoice ready: NO", "",
+        "SCENARIO F — FIELD COMPLETION", f"Canonical: {complete.office_update.field_status.value}",
+        "Invoice created: NO", "Invoice readiness decided: NO", "",
+        "SCENARIO G/H — REPLAY VS REPEATED BUSINESS STATE",
+        f"First delivery: {first.outcome.value}", f"Exact replay: {replay.outcome.value}",
+        f"New event, same WORKING state: {repeated.outcome.value}", "",
+        "SCENARIO I — STALE EVENT", "Current sequence: 5", "Incoming sequence: 3",
+        f"Outcome: {stale.outcome.value}", "State rolled backward: NO", "",
+        "SCENARIO J — UNKNOWN STATUS", f"Outcome: {unknown.outcome.value}", "Guessed mapping: NO", "",
+        "SCENARIO K — UNKNOWN JOB IDENTITY", f"Outcome: {identity.outcome.value}",
+        "Office update: NONE", "Guessed match: NO", "",
+        "OBSERVED LAB RESULT", "The bounded integration normalizes required field states, detects exact replay,",
+        "keeps repeated business observations distinct, and prevents stale rollback.",
+        "Field completion remains distinct from invoice readiness.", "",
+        "All FieldTrack states, sequence semantics, identities, and rules are MODELED ASSUMPTIONS.",
+    ))
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run executable textbook chapters")
-    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6"))
+    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7"))
     args = parser.parse_args(argv)
     if args.chapter == "chapter0":
         print(render_chapter0())
@@ -379,4 +431,6 @@ def main(argv: list[str] | None = None) -> int:
         print(render_chapter5())
     elif args.chapter == "chapter6":
         print(render_chapter6())
+    elif args.chapter == "chapter7":
+        print(render_chapter7())
     return 0

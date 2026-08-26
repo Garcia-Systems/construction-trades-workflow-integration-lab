@@ -55,6 +55,9 @@ the integration—owns assignment.
 Chapter 6 adds exact material-identity mapping, explicit unit normalization, partial
 readiness, and an acknowledged SupplyDesk material-request boundary. It does not
 purchase, track inventory, or select substitutes.
+Chapter 7 adds a source-specific FieldTrack adapter and bounded office-facing field-status
+normalization, with workflow-specific progression, replay, stale-sequence, blocked, partial,
+and completion handling. Completion is not converted into invoice readiness.
 
 ## Evidence vocabulary
 
@@ -83,6 +86,7 @@ python -m trades_lab chapter3
 python -m trades_lab chapter4
 python -m trades_lab chapter5
 python -m trades_lab chapter6
+python -m trades_lab chapter7
 ```
 
 The Chapter 0 CLI proves that its baseline is represented consistently and derives
@@ -98,6 +102,8 @@ Chapter 5 compares an initial request, exact replay, changed context, assignment
 conflict, cancellation, and stale pre-cancellation input without choosing a crew.
 Chapter 6 contrasts direct and converted mappings with unknown, ambiguous,
 unsupported-unit and substitution stops, then demonstrates partial job readiness.
+Chapter 7 contrasts blocked, partial-completion, and completion observations, exact replay
+versus repeated business state, stale sequences, and mapping/identity exceptions.
 
 ## Chapter index and study path
 
@@ -108,8 +114,9 @@ unsupported-unit and substitution stops, then demonstrates partial job readiness
 - **Chapter 4 — Accepted Estimate to Job:** implemented ([read it](chapters/04-accepted-estimate-to-job.md)). Run `python -m trades_lab chapter4` and compare first delivery, duplicate delivery, and conflict.
 - **Chapter 5 — Job to Schedule:** implemented ([read it](chapters/05-job-to-schedule.md)). Run `python -m trades_lab chapter5` to contrast request acknowledgement, assignment, replay, and changed context.
 - **Chapter 6 — Materials and Purchasing Handoff:** implemented ([read it](chapters/06-materials-and-purchasing-handoff.md)). Run `python -m trades_lab chapter6` to compare direct mapping, unknown identity, conversion, and partial readiness.
-- **Chapter 7:** planned; not implemented.
-- **Chapters 8–20:** planned; not implemented. Later work will introduce behavior progressively without assuming a favorable outcome.
+- **Chapter 7 — Field Status to Office:** implemented ([read it](chapters/07-field-status-to-office.md)). Run `python -m trades_lab chapter7` to study blocked, partial, complete, replay, repeated-state, and stale-event scenarios.
+- **Chapter 8:** planned; invoice readiness is not implemented.
+- **Chapters 9–20:** planned; not implemented. Later work will introduce behavior progressively without assuming a favorable outcome.
 
 Suggested study path: read Chapter 0 and run its CLI, then read Chapter 1 and
 run the discovery briefing. Inspect why readiness changes before drawing a
@@ -139,6 +146,11 @@ mapping mechanism is separately identifiable from customer-specific mapping cont
 retired products, new codes, and semantic changes are an explicit support surface.
 This mixed evidence strengthens narrow technical-mechanism reuse while weakening any
 assumption that mapping content itself will transfer between customers.
+Then run Chapter 7. Shared identity, provenance, correlation, event, exception, and
+duplicate-detection patterns recur; the FieldTrack adapter/mapping and sequence semantics
+are source-specific, while progression and blocked/completion treatment are workflow-specific.
+Job/crew maps and the relevant status subset are configuration. The executable evidence
+shows `COMPLETED` only as a field observation: no invoice-readiness decision exists.
 
 The original verdict, **PROMISING — VALIDATE IN DISCOVERY**, is a modeled starting
 hypothesis—not a conclusion. Even a technically successful implementation does
