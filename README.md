@@ -87,6 +87,10 @@ scope redesign; unsupported consequential writes are never simulated.
 Chapter 17 maps that accumulated implementation structure back to the original delivery categories,
 then uses explicit standardized, mixed, bespoke, difficult-access, and closed-redesign sensitivities.
 Repository metrics remain structural evidence, never measured labor.
+Chapter 18 keeps recurring support separate from initial delivery. It inventories access, vendor,
+mapping, failure, reconciliation, exception, customer-rule, observability, configuration, and runbook
+obligations, then tests the modeled $12,000 fee using explicit event/hour/cost sensitivities and an
+included-support versus change-request boundary. It issues no final market verdict.
 
 ## Evidence vocabulary
 
@@ -126,6 +130,7 @@ python -m trades_lab chapter14
 python -m trades_lab chapter15
 python -m trades_lab chapter16
 python -m trades_lab chapter17
+python -m trades_lab chapter18
 ```
 
 The Chapter 0 CLI proves that its baseline is represented consistently and derives
@@ -169,6 +174,10 @@ Chapter 17 preserves the original 466 hours, 52.8% reusable effort, and commerci
 **MODELED ASSUMPTION**; interprets repository components as **OBSERVED IMPLEMENTATION STRUCTURE**;
 and labels every revised hour, labor-reuse percentage, cost, and contribution as a **SENSITIVITY
 ASSUMPTION**. It revisits delivery economics only, not recurring support economics or a final verdict.
+Chapter 18 preserves the original $12,000 recurring fee as **MODELED ASSUMPTION**, treats repository
+support surfaces as **OBSERVED IMPLEMENTATION STRUCTURE**, and labels every annual event, hour, labor
+rate, direct cost, contribution, and break-even result **SENSITIVITY ASSUMPTION**. Routine credential,
+mapping, replay, and reconciliation work is distinguished from new systems/workflows and major redesign.
 
 ## Chapter index and study path
 
@@ -190,7 +199,8 @@ ASSUMPTION**. It revisits delivery economics only, not recurring support economi
 - **Chapter 15 — Customer-Specific Rules Stress Test:** implemented ([read it](chapters/15-customer-specific-rules-stress-test.md)). Run `python -m trades_lab chapter15` to inspect the bespoke-customer scenarios and structural change inventory.
 - **Chapter 16 — Integration Access Stress Test:** implemented ([read it](chapters/16-integration-access-stress-test.md)). Run `python -m trades_lab chapter16` to compare clean, difficult, closed, CSV-drift, and human-assisted scenarios.
 - **Chapter 17 — Delivery Economics From Engineering Evidence:** implemented ([read it](chapters/17-delivery-economics-from-engineering-evidence.md)). Run `python -m trades_lab chapter17` to inspect category evidence and explicit delivery sensitivities.
-- **Chapter 18 — Support Economics:** planned and not implemented.
+- **Chapter 18 — Support Economics:** implemented ([read it](chapters/18-support-economics.md)). Run `python -m trades_lab chapter18` to inspect recurring obligations, support sensitivities, and scope examples.
+- **Chapter 19 — Build-versus-Buy:** planned and not implemented.
 
 Suggested study path: read Chapter 0 and run its CLI, then read Chapter 1 and
 run the discovery briefing. Inspect why readiness changes before drawing a
@@ -217,9 +227,9 @@ feasibility even when business need is unchanged. Strict export parsing and pack
 remain reusable; access-specific adapters and configuration grow, while a closed write changes the
 architecture to human action plus reconciliation. These results are structural evidence, not economics.
 Then run Chapter 17. Compare qualitative category evidence with transparent sensitivity inputs; do not
-convert Chapter 14's unit ratio into labor reuse. Delivery economics have now been revisited, while
-annual support effort, recurring contribution, build-versus-buy, and the final opportunity verdict remain
-separate future questions.
+convert Chapter 14's unit ratio into labor reuse. Next run Chapter 18 and compare its standardized, mixed,
+and bespoke annual support sensitivities. Delivery and recurring support remain separate; build-versus-buy
+and the final opportunity verdict remain future questions.
 Then read Chapter 3 and run its successful and failed lead scenarios. The bounded
 command, exceptions, provenance, correlation, and process-local replay behavior
 are the lab's first executable handoff evidence—not proof of real vendor

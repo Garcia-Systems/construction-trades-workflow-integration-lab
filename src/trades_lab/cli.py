@@ -30,6 +30,7 @@ from trades_lab.chapter16 import (CLEAN, CLOSED, DIFFICULT, RELIABILITY_MATRIX, 
     SchemaDriftError, build_report as build_access_report, classify_access,
     create_job_handoff_packet, evaluate_transition, parse_estimate_export, recommend_scope)
 from trades_lab.chapter17 import build_report as build_delivery_report
+from trades_lab.chapter18 import build_report as build_support_report
 from trades_lab.fixtures.chapter15 import (BILLING_PROJECT_JOBS, PAPER_COMPLETION, WEAK_IDENTITY_2025,
                                             WEAK_IDENTITY_2026)
 from trades_lab.fixtures.chapter13 import (CONFIG, CREDENTIALS, HEALTHY_DEPENDENCIES,
@@ -917,13 +918,54 @@ def render_chapter17() -> str:
                   "OBSERVED LAB RESULT",
                   "Engineering structure supports a reusable integration core and exposes recurring discovery, adapter, mapping, workflow, reliability, testing, and production work.",
                   "Viability of the original 466-hour / 52.8%-reuse model depends strongly on standardization, access quality, and customer variation.",
-                  "This is not a final commercial verdict. Chapter 18 support economics is not implemented."))
+                  "This is not a final commercial verdict. Recurring support economics are evaluated separately in Chapter 18."))
+    return "\n".join(lines)
+
+
+def render_chapter18() -> str:
+    report = build_support_report()
+    lines = ["CONSTRUCTION / TRADES WORKFLOW INTEGRATION LAB", "Chapter 18 — Support Economics", "",
+        "ORIGINAL RECURRING MODEL", f"Annual recurring fee: {_money(report.annual_recurring_fee)}",
+        f"Original support economics: {report.original_support_contribution}",
+        f"Evidence category: {report.recurring_fee_evidence_category.value}",
+        "The fee is fictional modeled pricing, not observed market pricing.", "",
+        "OBSERVED SUPPORT SURFACE", "Evidence category: OBSERVED IMPLEMENTATION STRUCTURE"]
+    for obligation in report.obligations:
+        lines.append(f"{obligation.name}: YES — {', '.join(obligation.evidence_references)}")
+    for scenario in report.scenarios:
+        category, share = scenario.concentration
+        margin = "N/A" if scenario.contribution_margin is None else f"{scenario.contribution_margin:.1%}"
+        capacity = "N/A" if scenario.hours_supported_before_fee_is_consumed is None else str(scenario.hours_supported_before_fee_is_consumed)
+        lines.extend(("", f"SCENARIO {scenario.scenario_id} — {scenario.name.upper()}",
+            "Evidence category: SENSITIVITY ASSUMPTION",
+            "Annual events: " + "; ".join(f"{e.category.value}={e.annual_events} × {e.average_hours_per_event}h" for e in scenario.event_assumptions),
+            f"Modeled annual support hours: {scenario.assumed_annual_support_hours}",
+            f"Sensitivity labor cost per hour: {_money(scenario.cost_assumption.labor_cost_per_hour)}",
+            f"Modeled support labor cost: {_money(scenario.support_labor_cost)}",
+            f"Recurring direct costs: {_money(scenario.other_recurring_direct_costs)}",
+            f"Support contribution: {_money(scenario.support_contribution)}", f"Contribution margin: {margin}",
+            f"Break-even recurring fee: {_money(scenario.break_even_recurring_fee)}",
+            f"Hours supported before fee is consumed: {capacity}",
+            f"Largest hour concentration: {category.value if category else 'NONE'} ({share:.1%})",
+            f"Predictability: {scenario.predictability.value}", f"Verdict: {scenario.verdict.value}"))
+    lines.extend(("", "SUPPORT SCOPE EXAMPLES", "Evidence category: MODELED ASSUMPTION"))
+    lines.extend(f"{example.name}: {example.scope.value} — {example.rationale}" for example in report.scope_examples)
+    lines.extend(("", "POSITIVE SUPPORT EVIDENCE", *(f"- {x}" for x in report.positive_evidence),
+        "", "NEGATIVE SUPPORT EVIDENCE", *(f"- {x}" for x in report.negative_evidence), "", "IMPORTANT",
+        "Repository support surface: OBSERVED IMPLEMENTATION STRUCTURE",
+        "Annual event counts and hours: SENSITIVITY ASSUMPTION",
+        "Labor rate, direct costs, contribution, and break-even fee: SENSITIVITY ASSUMPTION",
+        "$12,000 recurring fee: MODELED ASSUMPTION", "Initial delivery hours/cost from Chapter 17: EXCLUDED", "",
+        "OBSERVED LAB RESULT",
+        "The integration creates real ongoing support obligations even when its reusable core works correctly.",
+        "Whether a $12,000 annual fee is sustainable depends on interface stability, mapping churn, exception volume, customer-specific rules, and contractual scope.",
+        "Recurring revenue is not pure contribution. No final build-versus-buy verdict is produced; Chapter 19 is not implemented."))
     return "\n".join(lines)
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run executable textbook chapters")
-    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10", "chapter11", "chapter12", "chapter13", "chapter14", "chapter15", "chapter16", "chapter17"))
+    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10", "chapter11", "chapter12", "chapter13", "chapter14", "chapter15", "chapter16", "chapter17", "chapter18"))
     args = parser.parse_args(argv)
     if args.chapter == "chapter0":
         print(render_chapter0())
@@ -961,4 +1003,6 @@ def main(argv: list[str] | None = None) -> int:
         print(render_chapter16())
     elif args.chapter == "chapter17":
         print(render_chapter17())
+    elif args.chapter == "chapter18":
+        print(render_chapter18())
     return 0
