@@ -81,6 +81,9 @@ structural reuse without treating repository counts as labor. It is preserved as
 Chapter 15 returns to the original roadmap with a bespoke-customer stress test. Tidewater rules remain
 at the edge with no shared-core modification, but new adapters, mappings, workflow layers, validation,
 exceptions, and support obligations complicate the repeatability hypothesis.
+Chapter 16 holds the business handoffs constant while varying synthetic interface access. Clean,
+difficult, and closed profiles drive API-write, export-assisted, human-assisted, read-only, or native
+scope redesign; unsupported consequential writes are never simulated.
 
 ## Evidence vocabulary
 
@@ -118,6 +121,7 @@ python -m trades_lab chapter12
 python -m trades_lab chapter13
 python -m trades_lab chapter14
 python -m trades_lab chapter15
+python -m trades_lab chapter16
 ```
 
 The Chapter 0 CLI proves that its baseline is represented consistently and derives
@@ -154,6 +158,9 @@ has a different denominator from Chapter 0's modeled reusable-effort percentage.
 Chapter 15 runs the deliberately unusual Tidewater scenarios: signed versus verbal acceptance,
 early jobs, approval-gated scheduling, partial kit expansion, paper provenance, qualified identity,
 billing-project readiness, and context-sensitive `DONE` semantics.
+Chapter 16 compares the same six handoffs under clean, difficult, and closed access, including safe-write
+recovery, nightly CSV ingestion, strict schema-drift failure, no-sandbox constraints, and a validated
+human packet that performs no destination write.
 
 ## Chapter index and study path
 
@@ -173,7 +180,8 @@ billing-project readiness, and context-sensitive `DONE` semantics.
 - **Chapter 13 — Production Integration Engineering:** implemented ([read it](chapters/13-production-integration-engineering.md)). Run `python -m trades_lab chapter13` to inspect healthy startup, partial outages, uncertain-write alerting, scheduler overlap, and secret redaction.
 - **Chapter 14 — Measure What Was Actually Built:** implemented ([read it](chapters/14-measure-what-was-actually-built.md)). Run `python -m trades_lab chapter14` to compare Chapter 0 assumptions with observed repository structure.
 - **Chapter 15 — Customer-Specific Rules Stress Test:** implemented ([read it](chapters/15-customer-specific-rules-stress-test.md)). Run `python -m trades_lab chapter15` to inspect the bespoke-customer scenarios and structural change inventory.
-- **Chapter 16 — Integration-Access Stress Test:** planned; clean/difficult/closed access profiles and later economics have not been implemented.
+- **Chapter 16 — Integration Access Stress Test:** implemented ([read it](chapters/16-integration-access-stress-test.md)). Run `python -m trades_lab chapter16` to compare clean, difficult, closed, CSV-drift, and human-assisted scenarios.
+- **Chapter 17 — Delivery Economics from Engineering Evidence:** planned and not implemented.
 
 Suggested study path: read Chapter 0 and run its CLI, then read Chapter 1 and
 run the discovery briefing. Inspect why readiness changes before drawing a
@@ -195,6 +203,10 @@ implementation inventory is preserved as additional evidence. The standardized-c
 still belongs in the future roadmap; Chapter 15 is specifically the bespoke-customer stress test.
 Then run Chapter 15 to compare unchanged infrastructure with specialized adapters, mappings, policies,
 workflow layers, validation, exceptions, and support. Its structural units are not labor or economics.
+Then run Chapter 16. The capability matrix demonstrates that interface quality changes technical
+feasibility even when business need is unchanged. Strict export parsing and packet/provenance mechanisms
+remain reusable; access-specific adapters and configuration grow, while a closed write changes the
+architecture to human action plus reconciliation. These results are structural evidence, not economics.
 Then read Chapter 3 and run its successful and failed lead scenarios. The bounded
 command, exceptions, provenance, correlation, and process-local replay behavior
 are the lab's first executable handoff evidence—not proof of real vendor
@@ -269,3 +281,6 @@ as tagged implementation units. Chapter 15 adds BidForge semantics, verbal-revie
 approval routing, kit definitions, paper-entry validation, billing-project membership, weak-ID rules,
 and crew-specific completion semantics. Reusable runtime mechanisms are visible, but structural counts
 are not recurring support effort or contribution; economics remain open.
+Chapter 16 adds export delivery/monitoring, schema drift, partial acknowledgements, production-only
+testing, manual handoff ownership, reconciliation dependency, process training, and automation-expectation
+maintenance. It inventories support surface but calculates no support cost.
