@@ -31,6 +31,7 @@ from trades_lab.chapter16 import (CLEAN, CLOSED, DIFFICULT, RELIABILITY_MATRIX, 
     create_job_handoff_packet, evaluate_transition, parse_estimate_export, recommend_scope)
 from trades_lab.chapter17 import build_report as build_delivery_report
 from trades_lab.chapter18 import build_report as build_support_report
+from trades_lab.chapter19 import SCENARIOS as DECISION_SCENARIOS, build_decisions, decision_matrix
 from trades_lab.fixtures.chapter15 import (BILLING_PROJECT_JOBS, PAPER_COMPLETION, WEAK_IDENTITY_2025,
                                             WEAK_IDENTITY_2026)
 from trades_lab.fixtures.chapter13 import (CONFIG, CREDENTIALS, HEALTHY_DEPENDENCIES,
@@ -963,9 +964,42 @@ def render_chapter18() -> str:
     return "\n".join(lines)
 
 
+def render_chapter19() -> str:
+    decisions = build_decisions()
+    scenarios = {scenario.scenario_id: scenario for scenario in DECISION_SCENARIOS}
+    lines = ["CONSTRUCTION / TRADES WORKFLOW INTEGRATION LAB",
+        "Chapter 19 — Build, Buy, Configure, or Integrate?", "",
+        "All commercial alternatives are fictional: MODELED_ALTERNATIVE_ASSUMPTION.",
+        "No opaque numeric score is used; disqualifiers apply before transparent rules."]
+    for decision in decisions:
+        scenario = scenarios[decision.scenario_id]
+        lines.extend(("", f"SCENARIO {scenario.scenario_id} — {scenario.name.upper()}"))
+        lines.extend(scenario.facts)
+        full_custom = next(e for e in decision.considered_alternatives
+                           if e.strategy.value == "CUSTOM_INTEGRATION_LAYER")
+        if full_custom.disqualifiers:
+            lines.append("full custom integration: DISQUALIFIED — " + full_custom.disqualifiers[0])
+        lines.extend((f"Recommended strategy: {decision.recommended_strategy.value}",
+                      *(f"Reason: {reason}" for reason in decision.reasons)))
+    lines.extend(("", "DECISION MATRIX", decision_matrix(decisions), "", "HYBRID EXAMPLES",
+        "CONFIGURE_EXISTING + NATIVE_INTEGRATION + NARROW_CUSTOM_EDGE",
+        "LOW_CODE_INTEGRATION for simple handoffs + NARROW_CUSTOM_EDGE for reconciliation", "",
+        "UNRESOLVED DISCOVERY QUESTIONS"))
+    lines.extend(f"- {question}" for question in decisions[0].unresolved_questions)
+    lines.extend(("", "OBSERVED LAB EVIDENCE",
+        "Custom software is strongest when valuable cross-system gaps remain after process, configuration, native, low-code, narrow-edge, and replacement alternatives are considered.",
+        "The lab also identifies technically feasible scenarios where custom development should lose.",
+        "Chapter 17 delivery structure and Chapter 18 recurring support surface make custom software an ongoing commitment.", "",
+        "MODELED ALTERNATIVE ASSUMPTION",
+        "ContractorSuite, FlowBridge, and VendorConnect capabilities and scenario fit are synthetic.",
+        "SENSITIVITY ASSUMPTION: none added in Chapter 19.",
+        "No overall opportunity verdict is issued. Chapter 20 remains unimplemented."))
+    return "\n".join(lines)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run executable textbook chapters")
-    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10", "chapter11", "chapter12", "chapter13", "chapter14", "chapter15", "chapter16", "chapter17", "chapter18"))
+    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10", "chapter11", "chapter12", "chapter13", "chapter14", "chapter15", "chapter16", "chapter17", "chapter18", "chapter19"))
     args = parser.parse_args(argv)
     if args.chapter == "chapter0":
         print(render_chapter0())
@@ -1005,4 +1039,6 @@ def main(argv: list[str] | None = None) -> int:
         print(render_chapter17())
     elif args.chapter == "chapter18":
         print(render_chapter18())
+    elif args.chapter == "chapter19":
+        print(render_chapter19())
     return 0

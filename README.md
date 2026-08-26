@@ -6,6 +6,9 @@ meaningful transitions among existing CRM, estimating, scheduling, field,
 purchasing, and accounting systems **without becoming a bespoke workflow
 platform**, and whether the resulting complexity still supports the economics.
 Evidence may strengthen, weaken, or reject the hypothesis.
+Chapters 0–19 are implemented. Opportunity evaluation now compares process,
+configuration, native, low-code, narrow-custom, full-custom, and replacement
+alternatives before Chapter 20 supplies the still-unimplemented capstone verdict.
 
 > **Fictional-customer notice:** James River Mechanical, its approximately 44
 > employees, seven field crews, people, systems, workflows, figures, vendors,
@@ -91,6 +94,9 @@ Chapter 18 keeps recurring support separate from initial delivery. It inventorie
 mapping, failure, reconciliation, exception, customer-rule, observability, configuration, and runbook
 obligations, then tests the modeled $12,000 fee using explicit event/hour/cost sensitivities and an
 included-support versus change-request boundary. It issues no final market verdict.
+Chapter 19 adds an explainable build/buy/configure/integrate framework. Eight strategies, fictional
+alternatives, qualitative dimensions, disqualifiers, hybrids, and eight synthetic contractor scenarios
+show both where custom loses and where a full integration layer is defensible. It issues no overall verdict.
 
 ## Evidence vocabulary
 
@@ -131,6 +137,7 @@ python -m trades_lab chapter15
 python -m trades_lab chapter16
 python -m trades_lab chapter17
 python -m trades_lab chapter18
+python -m trades_lab chapter19
 ```
 
 The Chapter 0 CLI proves that its baseline is represented consistently and derives
@@ -178,6 +185,9 @@ Chapter 18 preserves the original $12,000 recurring fee as **MODELED ASSUMPTION*
 support surfaces as **OBSERVED IMPLEMENTATION STRUCTURE**, and labels every annual event, hour, labor
 rate, direct cost, contribution, and break-even result **SENSITIVITY ASSUMPTION**. Routine credential,
 mapping, replay, and reconciliation work is distinguished from new systems/workflows and major redesign.
+Chapter 19 labels ContractorSuite, FlowBridge, and VendorConnect as fictional alternative assumptions,
+uses no numeric total score, and applies rule-derived disqualifiers before recommending the smallest
+adequate strategy within each synthetic scenario.
 
 ## Chapter index and study path
 
@@ -200,7 +210,8 @@ mapping, replay, and reconciliation work is distinguished from new systems/workf
 - **Chapter 16 — Integration Access Stress Test:** implemented ([read it](chapters/16-integration-access-stress-test.md)). Run `python -m trades_lab chapter16` to compare clean, difficult, closed, CSV-drift, and human-assisted scenarios.
 - **Chapter 17 — Delivery Economics From Engineering Evidence:** implemented ([read it](chapters/17-delivery-economics-from-engineering-evidence.md)). Run `python -m trades_lab chapter17` to inspect category evidence and explicit delivery sensitivities.
 - **Chapter 18 — Support Economics:** implemented ([read it](chapters/18-support-economics.md)). Run `python -m trades_lab chapter18` to inspect recurring obligations, support sensitivities, and scope examples.
-- **Chapter 19 — Build-versus-Buy:** planned and not implemented.
+- **Chapter 19 — Build, Buy, Configure, or Integrate?:** implemented ([read it](chapters/19-build-buy-configure-or-integrate.md)). Run `python -m trades_lab chapter19` to compare eight scenario-specific strategies.
+- **Chapter 20 — Capstone:** planned and not implemented; no overall opportunity verdict has been issued.
 
 Suggested study path: read Chapter 0 and run its CLI, then read Chapter 1 and
 run the discovery briefing. Inspect why readiness changes before drawing a
@@ -228,8 +239,8 @@ remain reusable; access-specific adapters and configuration grow, while a closed
 architecture to human action plus reconciliation. These results are structural evidence, not economics.
 Then run Chapter 17. Compare qualitative category evidence with transparent sensitivity inputs; do not
 convert Chapter 14's unit ratio into labor reuse. Next run Chapter 18 and compare its standardized, mixed,
-and bespoke annual support sensitivities. Delivery and recurring support remain separate; build-versus-buy
-and the final opportunity verdict remain future questions.
+and bespoke annual support sensitivities. Delivery and recurring support remain separate. Then run
+Chapter 19 to compare credible alternatives before the final opportunity verdict, which remains a Chapter 20 question.
 Then read Chapter 3 and run its successful and failed lead scenarios. The bounded
 command, exceptions, provenance, correlation, and process-local replay behavior
 are the lab's first executable handoff evidence—not proof of real vendor

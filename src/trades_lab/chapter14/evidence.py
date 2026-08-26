@@ -121,6 +121,9 @@ IMPLEMENTATION_INVENTORY = (
     _u("mapping-tests", "Material boundary behavior tests", 6, C.TESTING, R.SAME_DOMAIN, E.OBSERVED_SPECIALIZATION, "tests/test_chapter6_materials_handoff.py", (6,)),
     _u("reliability-tests", "Reliability behavior tests", 9, C.TESTING, R.CROSS_WORKFLOW, E.OBSERVED_REUSE, "tests/test_chapter9_failure_retry_replay.py", (9,10,11,13)),
     _u("runtime-tests", "Runtime operability tests", 13, C.TESTING, R.SAME_DOMAIN, E.OBSERVED_SPECIALIZATION, "tests/test_chapter13_production_runtime.py", (13,)),
+    _u("strategy-rules", "Build/buy/configure decision rules", 19, C.WORKFLOW_SPECIFIC_LOGIC, R.SAME_DOMAIN, E.OBSERVED_SPECIALIZATION, "src/trades_lab/chapter19/decision.py", (19,), notes="Explainable scenario strategy selection; not shared integration core."),
+    _u("alternative-config", "Fictional alternative assumptions", 19, C.CONFIGURATION, R.CUSTOMER_SPECIFIC, E.MODELED_ONLY, "src/trades_lab/chapter19/decision.py", (19,), notes="Synthetic capabilities, never vendor facts."),
+    _u("decision-tests", "Strategy decision behavior tests", 19, C.TESTING, R.SAME_DOMAIN, E.OBSERVED_SPECIALIZATION, "tests/test_chapter19_decisions.py", (19,)),
 )
 
 
