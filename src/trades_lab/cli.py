@@ -29,6 +29,7 @@ from trades_lab.chapter15 import (BidForgeAdapter, CORE_IMPACT, SUPPORT_SURFACE,
 from trades_lab.chapter16 import (CLEAN, CLOSED, DIFFICULT, RELIABILITY_MATRIX, SUPPORT,
     SchemaDriftError, build_report as build_access_report, classify_access,
     create_job_handoff_packet, evaluate_transition, parse_estimate_export, recommend_scope)
+from trades_lab.chapter17 import build_report as build_delivery_report
 from trades_lab.fixtures.chapter15 import (BILLING_PROJECT_JOBS, PAPER_COMPLETION, WEAK_IDENTITY_2025,
                                             WEAK_IDENTITY_2026)
 from trades_lab.fixtures.chapter13 import (CONFIG, CREDENTIALS, HEALTHY_DEPENDENCIES,
@@ -867,9 +868,62 @@ def render_chapter16() -> str:
     return "\n".join(lines)
 
 
+def render_chapter17() -> str:
+    report = build_delivery_report()
+    original = report.original_model
+    lines = [
+        "CONSTRUCTION / TRADES WORKFLOW INTEGRATION LAB",
+        "Chapter 17 — Delivery Economics From Engineering Evidence", "",
+        "ORIGINAL MODEL", "Evidence status: MODELED ASSUMPTION",
+        f"Modeled engineering hours: {original.total_hours}",
+        f"Modeled reusable delivery effort: {original.reusable_labor_percentage}%",
+        f"Implementation price: {_money(original.implementation_price)}",
+        f"Annual recurring fee (preserved, not analyzed here): {_money(original.annual_recurring_fee)}", "",
+        "ENGINEERING EVIDENCE", "Evidence status: OBSERVED IMPLEMENTATION STRUCTURE",
+    ]
+    for item in report.evidence_categories:
+        lines.extend(("", item.category.value,
+                      f"Original modeled hours: {item.original_modeled_hours} (MODELED ASSUMPTION)",
+                      f"Structural comparison: {item.comparison.value}",
+                      f"Sensitivity direction: {item.sensitivity_direction.value}",
+                      f"Reuse character: {item.reuse_character.value}",
+                      f"Uncertainty: {item.uncertainty.value}", f"Reason: {item.observed_structure_summary}"))
+    lines.extend(("", "DELIVERY COST INPUT", "Evidence category: SENSITIVITY ASSUMPTION",
+                  f"Hypothetical engineering delivery cost per hour: {_money(report.sensitivity_scenarios[0].cost_assumption.engineering_cost_per_hour)}",
+                  "This is configurable and is not represented as a market or observed rate."))
+    for scenario in report.sensitivity_scenarios:
+        margin = "N/A" if scenario.contribution_margin is None else f"{scenario.contribution_margin:.1%}"
+        lines.extend(("", f"SENSITIVITY SCENARIO — {scenario.name.upper()}",
+                      "Evidence category: SENSITIVITY ASSUMPTION",
+                      f"Modeled hours: {scenario.total_modeled_hours}",
+                      f"Reusable labor assumption: {scenario.reusable_labor_percentage}%",
+                      f"Source-specific labor assumption: {scenario.source_specific_labor_percentage}%",
+                      f"Customer-specific labor assumption: {scenario.customer_specific_labor_percentage}%",
+                      "Category hours: " + ", ".join(f"{c.name}={h}" for c, h in scenario.category_hours.items()),
+                      f"Modeled delivery cost: {_money(scenario.delivery_labor_cost)}",
+                      f"Modeled contribution: {_money(scenario.modeled_contribution)}",
+                      f"Contribution margin: {margin}",
+                      "Modeled break-even implementation price under this sensitivity scenario: " + _money(scenario.modeled_break_even_implementation_price),
+                      f"Automation scope: {scenario.automation_scope}", f"Value caveat: {scenario.value_caveat}",
+                      f"Delivery-side verdict: {scenario.verdict.value}"))
+    lines.extend(("", "ECONOMIC WARNING",
+                  "A technically successful integration can fail economically when delivery, rework, access friction, and customer rules approach the implementation price.",
+                  "Shared code exists ≠ the current customer is cheap to deliver.", "",
+                  "IMPORTANT", "repository structure ≠ human effort measurement",
+                  "Repository implementation units: NOT engineering hours",
+                  "Observed structural reuse: NOT measured labor reuse",
+                  "All revised hour values: SENSITIVITY ASSUMPTIONS",
+                  "No unit, adapter, file, test, code-size, or chapter count is converted to labor hours.", "",
+                  "OBSERVED LAB RESULT",
+                  "Engineering structure supports a reusable integration core and exposes recurring discovery, adapter, mapping, workflow, reliability, testing, and production work.",
+                  "Viability of the original 466-hour / 52.8%-reuse model depends strongly on standardization, access quality, and customer variation.",
+                  "This is not a final commercial verdict. Chapter 18 support economics is not implemented."))
+    return "\n".join(lines)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run executable textbook chapters")
-    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10", "chapter11", "chapter12", "chapter13", "chapter14", "chapter15", "chapter16"))
+    parser.add_argument("chapter", choices=("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "chapter5", "chapter6", "chapter7", "chapter8", "chapter9", "chapter10", "chapter11", "chapter12", "chapter13", "chapter14", "chapter15", "chapter16", "chapter17"))
     args = parser.parse_args(argv)
     if args.chapter == "chapter0":
         print(render_chapter0())
@@ -905,4 +959,6 @@ def main(argv: list[str] | None = None) -> int:
         print(render_chapter15())
     elif args.chapter == "chapter16":
         print(render_chapter16())
+    elif args.chapter == "chapter17":
+        print(render_chapter17())
     return 0
