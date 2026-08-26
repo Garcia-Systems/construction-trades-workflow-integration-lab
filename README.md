@@ -64,6 +64,9 @@ Chapter 9 adds deterministic fault scripts, explicit failure categories, bounded
 and targeted uncertain-outcome lookup. It is not a production messaging platform.
 Chapter 10 adds read-oriented reconciliation across authoritative snapshots, logical delivery
 history, and unresolved exceptions. It reports inconsistencies and performs no repair.
+Chapter 11 adds deterministic ownership, a bounded review lifecycle and actions, immutable audit
+history, active-condition deduplication, aging, and explicit replay approval. Resolution never
+makes the integration authoritative for source business state.
 
 ## Evidence vocabulary
 
@@ -96,6 +99,7 @@ python -m trades_lab chapter7
 python -m trades_lab chapter8
 python -m trades_lab chapter9
 python -m trades_lab chapter10
+python -m trades_lab chapter11
 ```
 
 The Chapter 0 CLI proves that its baseline is represented consistently and derives
@@ -119,6 +123,8 @@ Chapter 9 contrasts temporary outage, timeout-before-write, acknowledgement loss
 no-lookup uncertainty, permanent/conflict/authentication stops, and retry exhaustion.
 Chapter 10 contrasts a clean workflow with missing, conflicting, exhausted, unresolved,
 and orphaned state; successful execution history is distinct from current consistency.
+Chapter 11 contrasts identity, material/accounting mapping, state conflict, access repair,
+exhausted delivery, finding dismissal, invalid action, deduplication, and aging scenarios.
 
 ## Chapter index and study path
 
@@ -133,7 +139,8 @@ and orphaned state; successful execution history is distinct from current consis
 - **Chapter 8 — Completion to Invoice Readiness:** implemented ([read it](chapters/08-completion-to-invoice-readiness.md)). Run `python -m trades_lab chapter8` to compare fully ready, partial-completion, missing-accounting-identity, replay, and approval-change scenarios.
 - **Chapter 9 — Failure, Retry, and Replay:** implemented ([read it](chapters/09-failure-retry-and-replay.md)). Run `python -m trades_lab chapter9` to compare bounded recovery, targeted lookup, blocked uncertainty, and exhaustion.
 - **Chapter 10 — Reconciliation:** implemented ([read it](chapters/10-reconciliation.md)). Run `python -m trades_lab chapter10` to compare clean and broken authoritative snapshots.
-- **Chapters 11–20:** planned; Chapter 11 exception handling remains unimplemented; not implemented. Later work will introduce behavior progressively without assuming a favorable outcome.
+- **Chapter 11 — Exception Workflow:** implemented ([read it](chapters/11-exception-workflow.md)). Run `python -m trades_lab chapter11` to inspect routing, resolution, audit, aging, replay eligibility, and rejected actions.
+- **Chapters 12–20:** planned; Chapter 12's management briefing remains unimplemented. Later work will introduce behavior progressively without assuming a favorable outcome.
 
 Suggested study path: read Chapter 0 and run its CLI, then read Chapter 1 and
 run the discovery briefing. Inspect why readiness changes before drawing a
@@ -201,4 +208,6 @@ delivery states. Its new structure is workflow-specific relationship checking ra
 generic data-quality platform. Running reconciliation, inspecting recurring mismatches,
 repairing access or mappings, deciding safe replay, and coordinating review are ongoing
 **SUPPORT SURFACE** obligations. Findings and actions are advisory: no background daemon,
-automatic repair, or Chapter 11 exception-resolution workflow is present.
+or automatic repair is present. Chapter 11 makes exception review and accountable ownership an
+explicit support surface. Automation intentionally stops at ambiguity; only a bounded human action
+may permit resumption, and replay approval remains distinct from replay execution.
